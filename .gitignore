@@ -1,5 +1,3 @@
 venv
 .DS_Store
-site/*
-
-!site/CNAME
+site
