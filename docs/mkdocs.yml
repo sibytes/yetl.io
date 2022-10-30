@@ -1,0 +1,45 @@
+theme:
+  logo: assets/logo.png
+  name: material
+  features:
+   # - announce.dismiss
+    - content.code.annotate
+    # - content.tabs.link
+    - content.tooltips
+    # - header.autohide
+    # - navigation.expand
+    - navigation.indexes
+    # - navigation.instant
+    # - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    # - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    # - toc.integrate
+
+nav:
+    - YETL: 
+      - Why YETL: yetl/whyyetl.md
+      - Development Workflow: yetl/development_workflow.md
+    - Tutorial: tutorial.md
+    - Examples: examples.md
+    - Reference:
+        - Cli: reference/cli.md
+        - Projects: reference/projects.md
+        - Environments: reference/environments.md
+        - Schema Repo: reference/schema_repo.md
+        - Auditing: reference/auditing.md
+        - Sources:
+          - reference/sources/index.md
+          - Reader: reference/sources/source_reader.md
+          - SQL Reader: reference/sources/source_sql_reader.md
+        - Destinations:
+          - reference/destinations/index.md
+          - Delta Writer: reference/destinations/destination_delta_writer.md
+    - About: about.md
+site_name: YETL
