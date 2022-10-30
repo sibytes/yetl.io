@@ -1,1 +1,1 @@
-Made by [Shaun](https://www.linkedin.com/in/shaun-ryan-8704502/)
+Made by [Shaun Ryan](https://www.linkedin.com/in/shaun-ryan-8704502/)
