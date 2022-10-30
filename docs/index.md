@@ -3,7 +3,7 @@
 
 ## What it is?
 
-Coming Soonc
+Coming Soon
 
 ## Installation
 
