@@ -1,5 +1,17 @@
+site_url: https://sibytes.github.io/yetl/
+site_author: Shaun Ryan
+site_description: >-
+  Data engineering framework to template data flow pipelines
+  and implement transforms in python
+# Repository
+repo_name: sibytes/yetl
+repo_url: https://github.com/sibytes/yetl
+
+# Copyright
+copyright: Copyright &copy; 2021 - 2023 Shaun Ryan
+
 theme:
-  logo: assets/logo.png
+  # logo: assets/logo.png
   name: material
   features:
    # - announce.dismiss
@@ -21,6 +33,27 @@ theme:
     - search.suggest
     - toc.follow
     # - toc.integrate
+  palette:
+    - scheme: default
+      primary: amber
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: amber
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/logo.png
+  # icon:
+  logo: assets/logo.png
+  
+
 
 nav:
     - YETL?: 
