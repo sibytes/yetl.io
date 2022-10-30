@@ -3,9 +3,9 @@
 
 ## What it is?
 
-A dataengineering framework!
+Coming Soonc
 
-## Installtion
+## Installation
 
 ```
 pip install yetl-framework
