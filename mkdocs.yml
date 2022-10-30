@@ -23,7 +23,7 @@ theme:
     # - toc.integrate
 
 nav:
-    - YETL ?: 
+    - YETL?: 
       - index.md
       - Development Workflow: yetl/development_workflow.md
     - Tutorial: tutorial.md
