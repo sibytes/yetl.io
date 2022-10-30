@@ -1,7 +1,7 @@
 # Yet (another) ETL Framework
 
 
-## What it is?
+## What is YETL?
 
 Coming Soon
 
