@@ -100,7 +100,7 @@ When the data flow runs above what did it do? Well what it does depends on how i
 - Loads the valid data into source dataframes
 - Adds data lineage metadata to the dataframe
 - Creates the deltalake destination table if it deoesn't exist
-- Creates a uses a deltalake table SQL DLL schema definition in the schema repo
+- Creates or uses a deltalake table SQL DLL schema definition in the schema repo
 - Creates or updates the configured deltalake table properties
 - Creates or updates deltalake constraint properties
 - Creates a partition definition on the deltalake table
