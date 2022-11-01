@@ -44,8 +44,8 @@ theme:
     # - toc.integrate
   palette:
     - scheme: default
-      primary: amber
-      accent: amber
+      primary: pink
+      accent: pink
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
