@@ -1,9 +1,14 @@
 # Yet (another) ETL Framework
 
+Expressive, agile, fun for Data Engineers using Python!
+
+```
+pip install yetl-framework
+```
 
 ## What is YETL?
 
-Expressive, agile & fun!
+
 
 YETL is a data engineering framework for building modern cloud datalake houses with [Apache Spark][apache_spark], [Databricks][databricks], [DeltaLake][delta_lake]; hence the name Yet (another) ETL Framework. In time could support many more DSL frameworks and table formats e.g. Pandas and Iceberg
 
@@ -122,14 +127,6 @@ As of now we're developing and testing with:
 
  - pyspark 3.3.0
  - delta-spark 2.1.0
-
-
-
-## Installation
-
-```
-pip install yetl-framework
-```
 
 
 
