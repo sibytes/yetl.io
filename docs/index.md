@@ -33,7 +33,7 @@ Summary:
 
 ## What is it really?
 
-The best way to see what it is, is to look at simple example. There are many ways to define a data flow, and that's what great about yetl, it doesn't take that away from you nor does it take away the great DSL API's provided by [spark][apache_spark]
+The best way to see what it is, is to look at a simple example. There are many ways to define a data flow, and that's what great about yetl, it doesn't take that away from you nor does it take away the great DSL API's provided by [spark][apache_spark]
 
 This is a simple data flow that loads from 2 landed data files, typically you wouldn't integrate data from landing to raw but this shows that multiple sources and destinations is supported. It also loads a specific table however this doesn't have to be the case there are generic patterns we can use for many tables using a low code footprint but we can still inject specific transforms for all tables or some tables. You can even define your own save semantics and inject it into the load. In other words it can be as expressive as you want it to be.
 
