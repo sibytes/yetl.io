@@ -2,7 +2,7 @@
 
 Yetl is a python Data Engineering framework for Spark and DeltaLake; it therefore assumes some basic knowledge of Data Engineering, Python, PySpark, Spark and DeltaLake and recognise the need and benefits of using a data engineering framework.
 
-The content can obtained by cloning the [yetl.tutorial](https://github.com/sibytes/yetl.tutorial) repo:
+The content can be obtained by cloning the [yetl.tutorial](https://github.com/sibytes/yetl.tutorial) repo:
 
 ```sh
 git clone https://github.com/sibytes/yetl.tutorial.git
@@ -14,7 +14,7 @@ The repo is tagged at each step of the tutorial. Tags are named the same as step
 git checkout tags/step-0
 ```
 
-At each step of the tutorial you can simply checkout the step you've finished working on to ensure you starting the next step with everything as required. Alternatively if you're more confident with git and the topics then checkout the tag into a working branch and make your own commits. The remote repo is locked so commits cannot be pushed.
+At each step of the tutorial you can simply checkout the step you've finished working on to ensure you're starting the next step with everything as required. Alternatively if you're more confident with git and the topics then checkout the tag into a working branch and make your own commits. The remote repo is locked so commits cannot be pushed.
 
 
 Tutorials for learning about yetl:
@@ -23,10 +23,10 @@ Tutorials for learning about yetl:
 
 ## Pre-Requisites
 
-The following pre-requisites are required for this tutorial:
+The following pre-requisites are required for local environments for tutorials about working locally:
 
 - Python 3.9
 - Spark 3.3.0 - see [documentation]() and the many articles on the internet to install spark locally
 - Java 11 - [openjdk](https://openjdk.org/install/) is a good option to install java since there are no licensing issues or authentication required
-
-This tutorial assumes that the code editor is vscode on a local linux or mac environment. Any code editor can be used but you may need to adjust some steps in this walk through.
+- VSCode - This tutorial assumes that the code editor is vscode on a local linux or mac environment. Any code editor and/or windows can be used but you may need to adjust some steps in this walk through.
+- Databricks - Some tutorials will cover how code can be pulled to databricks and executed. These tutorials will assume some familiarity with databricks and access to databricks environment. They will also require the tutorial [data](https://github.com/sibytes/yetl.tutorial/tree/main/data) to be present on the databricks lake storage either in DBFS or mounted S3 or Azure DataLake storage; more specfically at this `/mnt/datalake/yetl_data` path configured in the [tutorial environment configuration](https://github.com/sibytes/yetl.tutorial/blob/main/config/environment/dbx_dev.yaml) `./config/environment/dbx_dev.yaml`. You can of course change this path as you please as long as you update the configfured path.

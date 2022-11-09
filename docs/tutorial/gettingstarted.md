@@ -22,7 +22,7 @@ python -m yetl init demo
 
 This will create the following config directory:
 
-![Config](./assets/Step 2 - 1.png)
+![Config](../assets/Step 2 - 1.png)
 
 The directories and files in config are as follows:
 
@@ -58,7 +58,7 @@ File \
 This will create a `project/demo` folder in the `./config` directory and the table manifest from the data files it scanned. The project folder is where we'll create our pipeline templates that we will build into pipelines.
 
 
-![Project](./assets/Step 3 - 1.png)
+![Project](../assets/Step 3 - 1.png)
 
 ## Step 4 - Create Pipeline Template
 
