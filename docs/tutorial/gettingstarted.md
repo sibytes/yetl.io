@@ -1,7 +1,7 @@
 # Getting Started
 
 
-## Step 1 - Install Python Dependencies
+## Step 1 - Installation
 
 With the project home dir create a virtual python environment and install the required libraries. This will install `yetl-framework` and the python dependencies required for this tutorial.
 
