@@ -60,11 +60,12 @@ Using the cli run the table manifest creation on a sample of the source data. Th
 python -m yetl create-table-manifest \
 "demo" \
 "./config/project"  \
-File "/Users/shaunryan/AzureDevOps/yetl.tutorial/data/landing/demo" -\
+File "./data/landing/demo" -\
 -filename "*" \
 --extract-regex "^[a-zA-Z_]+[a-zA-Z]+"
 ```
 
 This will create a `project/demo` folder in the `./config` directory and the table manifest from the data files it scanned. The project folder is where we'll create our pipeline templates that we will build into pipelines.
+
 
 ![Project](./assets/Step 3 - 1.png)
