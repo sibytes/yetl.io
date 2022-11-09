@@ -60,8 +60,9 @@ Using the cli run the table manifest creation on a sample of the source data. Th
 python -m yetl create-table-manifest \
 "demo" \
 "./config/project"  \
-File "./data/landing/demo" -\
--filename "*" \
+File \
+"./data/landing/demo" \
+--filename "*" \
 --extract-regex "^[a-zA-Z_]+[a-zA-Z]+"
 ```
 
