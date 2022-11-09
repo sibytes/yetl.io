@@ -67,7 +67,9 @@ theme:
 nav:
     - Summary: 
       - index.md
-    - Tutorial: tutorial.md
+    - Tutorial: 
+        - tutorial/index.md
+        - GettingStarted: tutorial/gettingstarted.md
     - Examples: examples.md
     - Reference:
         - Cli: reference/cli.md
