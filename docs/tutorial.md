@@ -52,7 +52,7 @@ YETL_ENVIRONMENT=local
 The `.env` can be used with vscode or your IDE to create environment variables. These environment variables are required by Yetl so that it know what environment it is and where the configuration resides.
 
 
-## step 3 - Create Table Manifest
+## Step 3 - Create Table Manifest
 
 Using the cli run the table manifest creation on a sample of the source data. This will scan the files and create a table manifest. It's uses a regex parameter to pull out the table name from the filenames:
 
