@@ -138,3 +138,68 @@ dataflow:
         options:
           mergeSchema: true
 ```
+
+
+## Step 4 - Build Pipeline Configuration
+
+In this step we will use the pipeline template `./config/project/demo/landing_to_raw.yaml` to create a pipeline configuration for each table in the table manifest at `./config/project/demo/demo_tables.yml`
+
+Build the pipeline configurations by executing:
+```sh
+python -m yetl build \
+demo \
+demo_tables.yml \
+landing_to_raw.yaml \
+./config
+```
+
+## Step 5 - Code Pipeline Transformation
+
+In this step we'll use python and yetl to code a function that loads our tables.
+
+Create a directory called `src` and a python file in that directory called `demo_landing_to_raw.py`.
+
+```sh
+mkdir ./src
+touch ./src/demo_landing_to_raw.py
+```
+
+Add the following code to `demo_landing_raw.py`
+
+```python
+from yetl.flow import (
+    yetl_flow,
+    IDataflow,
+    IContext,
+    Timeslice,
+    TimesliceUtcNow,
+    Save,
+)
+from pyspark.sql.functions import *
+from typing import Type
+
+_PROJECT = "demo"
+_PIPELINE_NAME = "landing_to_raw"
+
+@yetl_flow(project=_PROJECT, pipeline_name=_PIPELINE_NAME)
+def landing_to_raw(
+    table: str,
+    context: IContext,
+    dataflow: IDataflow,
+    timeslice: Timeslice = TimesliceUtcNow(),
+    save: Type[Save] = None,
+) -> dict:
+    """Load raw delta tables"""
+
+    source_table = f"{_PROJECT}_landing.{table}"
+    df = dataflow.source_df(source_table)
+
+    df = df.withColumn(
+        "_partition_key", date_format("_timeslice", "yyyyMMdd").cast("integer")
+    )
+
+    destination_table = f"{_PROJECT}_raw.{table}"
+    dataflow.destination_df(destination_table, df, save=save)
+
+    context.log.info(f"Loaded table {destination_table}")
+```
