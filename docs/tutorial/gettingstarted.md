@@ -27,7 +27,13 @@ pip install -r requirements.txt
 
 ## Step 1 - Create a Yetl Project
 
-Using the Yetl cli create a new project:
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-0
+```
+
+Using the Yetl cli create a new project
 
 ```sh
 python -m yetl init demo 
@@ -56,6 +62,12 @@ The `.env` can be used with vscode or your IDE to create environment variables. 
 
 ## Step 2 - Create Table Manifest
 
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-1
+```
+
 Using the cli run the table manifest creation on a sample of the source data. This will scan the files and create a table manifest. It's uses a regex parameter to pull out the table name from the filenames:
 
 ```sh
@@ -74,6 +86,12 @@ This will create a `project/demo` folder in the `./config` directory and the tab
 ![Project](../assets/Step 3 - 1.png)
 
 ## Step 3 - Create Pipeline Template
+
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-2
+```
 
 In this step will create a pipeline template for loading landing data from `./data/landing/demo` into a set of raw (bronze) deltalake tables. This template uses jinja and will be used to generate all the required pipeline configurations in the table manifest.
 
@@ -142,6 +160,12 @@ dataflow:
 
 ## Step 4 - Build Pipeline Config
 
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-3
+```
+
 In this step we will use the pipeline template `./config/project/demo/landing_to_raw.yaml` to create a pipeline configuration for each table in the table manifest at `./config/project/demo/demo_tables.yml`
 
 Build the pipeline configurations by executing:
@@ -154,6 +178,12 @@ landing_to_raw.yaml \
 ```
 
 ## Step 5 - Code Pipeline
+
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-4
+```
 
 In this step we'll use python and yetl to code a function that loads our tables.
 
@@ -207,6 +237,12 @@ def landing_to_raw(
 
 ## Step 6 - Code Main
 
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-5
+```
+
 Create a `main.py` python file in the project root.
 
 ```sh
@@ -234,6 +270,12 @@ print(results)
 ```
 
 ## Step 7 - Initial Load
+
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-6
+```
 
 Now for the cool bit. If you're using vscode then config files in `.vscode` included are already included in the repo that configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
 
@@ -429,6 +471,12 @@ yetl will create spark schema's for the files it loads since they don't exist ye
 
 ## Step 8 - Incremental Load
 
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-7
+```
+
 Typically you would now refine the spark schema's by profiling the data. Spark does an ok job inferring schema's but they can always be improved. Yetl does the hard graft of auto creating all the schema's you'll need for all your tables in a project. To keep the cadence of the tutorial we'll ignore this refinement.
 
 In this step we'll show how easy it is to do incremental load. Edit the `main.py` as follows:
@@ -489,6 +537,12 @@ Result:
 ```
 
 ## Step 9 - Full Reload
+
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-8
+```
 
 The data loaded incrementally because that's what it's configured to do in the write properties of the pipeline configuration, also operationally this is typically what's required so it makes sense for that to live in the configuration. However what if we want to reload all of the data or a given year or month occasionally as required? Since projects and data feeds don't always go as expected. Yetl supports this very elegantly!
 
