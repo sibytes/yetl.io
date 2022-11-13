@@ -16,7 +16,7 @@ Explore the project. Currently there's not much there at all, mostly a simply di
 
 ## Installation
 
-With the project home dir create a virtual python environment and install the required libraries. This will install `yetl-framework` and the python dependencies required for this tutorial.
+Within the project home dir create a virtual python environment and install the required libraries. This will install `yetl-framework` and the python dependencies required for this tutorial.
 
 ```sh
 python -m venv venv
