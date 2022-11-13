@@ -12,7 +12,7 @@ Checkout the beginning of the tutorial.
 git checkout getting-started-step-0
 ```
 
-Explore the project. Currently there's not there at all, mostly a simply directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates.
+Explore the project. Currently there's not much there at all, mostly a simply directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates. But hey, we're just getting started!
 
 ## Installation
 
