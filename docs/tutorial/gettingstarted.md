@@ -637,7 +637,7 @@ git checkout getting-started-step-9
 ```
 
 
-## Step 10 - Deploy To Databricks
+## Step 11 - Deploy To Databricks
 
 Checkout the starting position.
 
