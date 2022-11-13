@@ -579,7 +579,9 @@ results = json.dumps(results, indent=4, default=str)
 print(results)
 ```
 
-Execute the pipeline by hitting F5. The pipeline will run and reload all periods data overwriting the data that was there. You can check the result in pyspark.
+Execute the pipeline by hitting F5. The pipeline will run and reload all periods data overwriting the data that was there. You can check the result in pyspark. 
+
+Pay particular attention to the `_timeslice` metadata. Even though we executed the pipeline with wildcards yetl is smart enough to get the `_timeslice` value correct for the given data that was loaded. This is because this property in the configuration `yetl.metadata.timeslice: timeslice_file_date_format` tells yetl to shred the timeslice value from the date provided in the filename rather than get it from the Timeslice that was submitted.
 
 
 ```sh
