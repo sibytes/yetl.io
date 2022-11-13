@@ -140,7 +140,7 @@ dataflow:
 ```
 
 
-## Step 4 - Build Pipeline Configuration
+## Step 4 - Build Pipeline Config
 
 In this step we will use the pipeline template `./config/project/demo/landing_to_raw.yaml` to create a pipeline configuration for each table in the table manifest at `./config/project/demo/demo_tables.yml`
 
@@ -153,7 +153,7 @@ landing_to_raw.yaml \
 ./config
 ```
 
-## Step 5 - Code Pipeline Transformation
+## Step 5 - Code Pipeline
 
 In this step we'll use python and yetl to code a function that loads our tables.
 
@@ -205,7 +205,7 @@ def landing_to_raw(
 ```
 
 
-## Step 6 - Code Pipeline Execution
+## Step 6 - Code Main
 
 Create a `main.py` python file in the project root.
 
@@ -233,11 +233,83 @@ results = json.dumps(results, indent=4, default=str)
 print(results)
 ```
 
-## Step 7 - Execute The Pipeline
+## Step 7 - Initial Load
 
-Now for the cool bit. If you're using vscode then config files are already included in the repo that configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
+Now for the cool bit. If you're using vscode then config files in `.vscode` included are already included in the repo that configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
 
-Pyspark should fire up and some stuff happens. The results output shows what yetl did should print to the terminal and look something like this:
+### Loads The Data
+When process runs a number of things will happen! Pyspark should fire up and yetl loads the data from the landing location to the raw deltalake tables in a database called `demo_raw. You check this and see the results by running pyspark.
+
+```sh
+pyspark
+```
+
+Then check the data is loadeded:
+
+```python
+df = spark.sql("show tables in demo_raw")
+df.show()
+```
+
+Result:
+
+```sh
++---------+--------------------+-----------+                                    
+|namespace|           tableName|isTemporary|
++---------+--------------------+-----------+
+| demo_raw|    customer_details|      false|
+| demo_raw|customer_preferences|      false|
++---------+--------------------+-----------+
+```
+
+Query the customer_preferences table
+
+```python
+df = spark.sql("select * demo_raw.customer_preferences")
+df.show()
+exit()
+```
+
+Results:
+
+```
++---+-------------+-------------------+--------------------+--------------+--------------------+
+| id|allow_contact|         _timeslice|  _filepath_filename|_partition_key|         _dataset_id|
++---+-------------+-------------------+--------------------+--------------+--------------------+
+|  1|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  2|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  3|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  4|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  5|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  6|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  7|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  8|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+|  9|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
+| 10|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|acff36e8-28fc-4c9...|
++---+-------------+-------------------+--------------------+--------------+--------------------+
+```
+
+### Adds Lineage Columns
+
+yetl has added the lineage columns
+
+```sql
+    `_timeslice` timestamp 
+	`_filepath_filename` string
+	`_partition_key` integer
+	`_dataset_id` string NOT NULL 
+```
+
+### Creates The Schemas
+
+yetl will create spark schema's for the files it loads since they don't exist yet. It will will also create SQL schema's for the DeltaLake raw tables that don't exist yet. These can then be refined and committed to your git repo as part of the yetl project which are used at runtime on subsequent loads when cloned or pulled and executed.
+
+![Config](../assets/Step 7 - 1.png)
+
+
+### Returns An Audit Result
+
+ The returned result is a dictionary that shows what yetl did organised into a data lineage tree. For example the `customer_preferences` load will return the following:
 
 ```json
 {                                                                               
@@ -353,4 +425,141 @@ Pyspark should fire up and some stuff happens. The results output shows what yet
         "count": 0
     }
 }
+```
+
+## Step 8 - Incremental Load
+
+Typically you would now refine the spark schema's by profiling the data. Spark does an ok job inferring schema's but they can always be improved. Yetl does the hard graft of auto creating all the schema's you'll need for all your tables in a project. To keep the cadence of the tutorial we'll ignore this refinement.
+
+In this step we'll show how easy it is to do incremental load. Edit the `main.py` as follows:
+
+```python
+from src.demo_landing_to_raw import landing_to_raw
+from yetl.flow import Timeslice
+import json
+
+# timeslice = Timeslice(2021, 1, 1)
+timeslice = Timeslice(2021, 1, 2)
+
+table = "customer_details"
+results = landing_to_raw(table=table, timeslice=timeslice)
+results = json.dumps(results, indent=4, default=str)
+print(results)
+
+table = "customer_preferences"
+results = landing_to_raw(table=table, timeslice=timeslice)
+results = json.dumps(results, indent=4, default=str)
+print(results)
+```
+
+Now execute the pipeline again with F5. This time when the data loads it will use the schema's that were created rather than inferring them. Check that the data was loaded.
+
+```sh
+pyspark
+```
+
+Then check the data is loadeded:
+
+```python
+df = spark.sql("""
+    select * 
+    from demo_raw.customer_preferences 
+    where _timeslice = '2021-01-02'""")
+df.show()
+exit()
+```
+
+Result:
+
+```sh
++---+-------------+-------------------+--------------------+--------------+--------------------+
+| id|allow_contact|         _timeslice|  _filepath_filename|_partition_key|         _dataset_id|
++---+-------------+-------------------+--------------------+--------------+--------------------+
+| 11|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 12|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 13|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 14|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 15|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 16|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 17|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 18|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 19|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
+| 20|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|fe033f73-da59-42a...|
++---+-------------+-------------------+--------------------+--------------+--------------------+
+```
+
+## Step 9 - Full Reload
+
+The data loaded incrementally because that's what it's configured to do in the write properties of the pipeline configuration, also operationally this is typically what's required so it makes sense for that to live in the configuration. However what if we want to reload all of the data or a given year or month occasionally as required? Since projects and data feeds don't always go as expected. Yetl supports this very elegantly!
+
+To do this we have to do 2 things. We have to wildcard the timeslice path and we have to tell it to fully overwrite the data. Rather than get into a ownerous process of editing or rebuilding metadata yetl supports this using the API. 
+
+The yetl Timeslice object supports wildcards, also we import a Save type specifically for overwritting data and inject it into the load using dependency injection without changing the pipeline function itself. Yetl will provide a number of save types in the api with the default save being the save that is configured in the pipeline yaml.
+
+To do a full reload it's this simple! Edit the `main.py` file as follows.
+
+```python
+from src.demo_landing_to_raw import landing_to_raw
+from yetl.flow import Timeslice, OverwriteSave
+import json
+
+# timeslice = Timeslice(2021, 1, 1)
+# timeslice = Timeslice(2021, 1, 2)
+timeslice = Timeslice("*", "*", "*")
+
+table = "customer_details"
+results = landing_to_raw(table=table, timeslice=timeslice, save=OverwriteSave)
+results = json.dumps(results, indent=4, default=str)
+print(results)
+
+table = "customer_preferences"
+results = landing_to_raw(table=table, timeslice=timeslice, save=OverwriteSave)
+results = json.dumps(results, indent=4, default=str)
+print(results)
+```
+
+Execute the pipeline by hitting F5. The pipeline will run and reload all periods data overwriting the data that was there. You can check the result in pyspark.
+
+
+```sh
+pyspark
+```
+
+Then check the data is loadeded:
+
+```python
+df = spark.sql("""
+    select * 
+    from demo_raw.customer_preferences""")
+df.show()
+exit()
+```
+
+Result:
+
+```sh
++---+-------------+-------------------+--------------------+--------------+--------------------+
+| id|allow_contact|         _timeslice|  _filepath_filename|_partition_key|         _dataset_id|
++---+-------------+-------------------+--------------------+--------------+--------------------+
+| 11|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 12|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 13|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 14|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 15|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 16|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 17|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 18|        false|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 19|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+| 20|         true|2021-01-02 00:00:00|file:///Users/sha...|      20210102|ed2ce14e-b377-48b...|
+|  1|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  2|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  3|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  4|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  5|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  6|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  7|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  8|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+|  9|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
+| 10|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
++---+-------------+-------------------+--------------------+--------------+--------------------+
 ```
