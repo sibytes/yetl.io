@@ -351,7 +351,7 @@ yetl has added the lineage columns
 
 ### Creates The Schemas
 
-yetl will create spark schema's for the files it loads since they don't exist yet. It will will also create SQL schema's for the DeltaLake raw tables that don't exist yet. These can then be refined and committed to your git repo as part of the yetl project which are used at runtime on subsequent loads when cloned or pulled and executed.
+yetl will create spark schema's for the files it loads since they don't exist yet. It will also create SQL schema's for the DeltaLake raw tables that don't exist yet. These can then be refined and committed to your git repo as part of the yetl project which are used at runtime on subsequent loads when cloned or pulled and executed.
 
 ![Config](../assets/Step 7 - 1.png)
 
