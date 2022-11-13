@@ -43,7 +43,7 @@ This will create the following config directory:
 
 ![Config](../assets/Step 2 - 1.png)
 
-The directories and files in config are as follows:
+The directories and files in the config directory are as follows:
 
 - **environment** - Contains global level settings for yetl for the respective environment e.g. the root of the datalake where data resides. This is how yetl can be configured to run the same code locally and on databricks
 - **logging.yaml** - Contains the python logging configuration
