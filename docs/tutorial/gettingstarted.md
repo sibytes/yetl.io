@@ -281,7 +281,7 @@ Now for the cool bit. If you're using vscode then config files in `.vscode` incl
 
 ### Loads The Data
 
-When process runs a number of things will happen! Pyspark should fire up and yetl loads the data from the landing location for the period `2021-01-01` to the raw deltalake tables in a database called `demo_raw. You check this and see the results by running pyspark.
+When process runs a number of things will happen! Pyspark should fire up and yetl loads the data from the landing location for the period `2021-01-01` to the raw deltalake tables in a database called `demo_raw`. You check this and see the results by running pyspark.
 
 ```sh
 pyspark
