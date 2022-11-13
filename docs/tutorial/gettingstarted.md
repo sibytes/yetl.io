@@ -279,9 +279,15 @@ git checkout getting-started-step-6
 
 Now for the cool bit. If you're using vscode then config files in `.vscode` included with the repo already configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
 
+When process runs a number of things will happen!
+- Loads the data
+- Adds lineage columns
+- Creates the pyspark and SQL Schema's
+- Returns an full audit payload of what it did
+
 ### Loads The Data
 
-When process runs a number of things will happen! Pyspark should fire up and yetl loads the data from the landing location for the period `2021-01-01` to the raw deltalake tables in a database called `demo_raw`. You check this and see the results by running pyspark.
+Pyspark should fire up and yetl loads the data from the landing location for the period `2021-01-01` to the raw deltalake tables in a database called `demo_raw`. You check this and see the results by running pyspark.
 
 ```sh
 pyspark
