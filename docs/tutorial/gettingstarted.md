@@ -277,7 +277,7 @@ Checkout the starting position.
 git checkout getting-started-step-6
 ```
 
-Now for the cool bit. If you're using vscode then config files in `.vscode` included are already included in the repo that configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
+Now for the cool bit. If you're using vscode then config files in `.vscode` included with the repo already configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
 
 ### Loads The Data
 When process runs a number of things will happen! Pyspark should fire up and yetl loads the data from the landing location to the raw deltalake tables in a database called `demo_raw. You check this and see the results by running pyspark.
