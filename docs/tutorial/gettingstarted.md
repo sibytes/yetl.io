@@ -617,3 +617,21 @@ Result:
 | 10|         true|2021-01-01 00:00:00|file:///Users/sha...|      20210101|ed2ce14e-b377-48b...|
 +---+-------------+-------------------+--------------------+--------------+--------------------+
 ```
+
+## Step 10 - Parallel Load
+
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-9
+```
+
+
+## Step 10 - Deploy To Databricks
+
+Checkout the starting position.
+
+```sh
+git checkout getting-started-step-10
+```
+
