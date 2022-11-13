@@ -636,6 +636,37 @@ Checkout the starting position.
 git checkout getting-started-step-9
 ```
 
+Now we have a simple pipeline to on-board all of our landing data into raw delta tables. The code we have so far has just been loading one table after another, this is not massively efficient. If we have a spark cluster then we may as well make use of it. We can use a workflow orchestrator for complex workflows which requires more coding, and for some workloads this is entirely nessecary. 
+
+However for onboarding several tables using the same pattern would could just loop the files in our table manifest in a parallel loop and call that from an orchestrator. This step shows how we achieve that. 
+
+Yetl is not a workflow orchestrator at this time. Even if we decided to provide workflow orchestration tool it would be decoupled from yetl data flows. The reason being that one of the motivations to build yetl was that you don't always get to choose the orchestrator you want, if the framework and orchestration are tightly couple this limits the potential of the framework itself.
+
+To change the load to a parallel load change the `main.py` to the following.
+
+```python
+from src.demo_landing_to_raw import landing_to_raw
+from yetl.flow import Timeslice, OverwriteSave
+from yetl.workflow import multithreaded as yetl_wf
+import yaml
+
+# timeslice = Timeslice(2021, 1, 1)
+# timeslice = Timeslice(2021, 1, 2)
+timeslice = Timeslice("*", "*", "*")
+project = "demo"
+maxparallel = 2
+
+with open(
+    f"./config/project/{project}/{project}_tables.yml", "r", encoding="utf-8"
+) as f:
+    metdata = yaml.safe_load(f)
+tables: list = [t["table"] for t in metdata.get("tables")]
+
+yetl_wf.load(project, tables, landing_to_raw, timeslice, maxparallel)
+```
+
+Execute the pipeline again using F5. You should see the pipeline load both the tables in parallel threads. Whilst you may see not much gain running locally you will see huge differences between single execution and parallel execution when deploy it to and run it on a managed service spark cluster; databricks of course being the best choice!
+
 
 ## Step 11 - Deploy To Databricks
 
