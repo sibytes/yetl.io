@@ -57,7 +57,7 @@ YETL_ROOT=./config
 YETL_ENVIRONMENT=local
 ```
 
-The `.env` can be used with vscode or your IDE to create environment variables. These environment variables are required by Yetl so that it know what environment it is and where the configuration resides.
+The `.env` can be used with vscode or your IDE to create environment variables. These environment variables are required by Yetl so that it knows what environment it is and where the configuration resides.
 
 
 ## Step 2 - Create Table Manifest
