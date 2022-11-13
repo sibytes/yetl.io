@@ -203,3 +203,154 @@ def landing_to_raw(
 
     context.log.info(f"Loaded table {destination_table}")
 ```
+
+
+## Step 6 - Code Pipeline Execution
+
+Create a `main.py` python file in the project root.
+
+```sh
+touch ./main.py
+```
+
+Add the following pipeline that will run our pipeline for both our tables.
+
+```py
+from src.demo_landing_to_raw import landing_to_raw
+from yetl.flow import Timeslice
+import json
+
+timeslice = Timeslice(2021, 1, 1)
+
+table = "customer_details"
+results = landing_to_raw(table=table, timeslice=timeslice)
+results = json.dumps(results, indent=4, default=str)
+print(results)
+
+table = "customer_preferences"
+results = landing_to_raw(table=table, timeslice=timeslice)
+results = json.dumps(results, indent=4, default=str)
+print(results)
+```
+
+## Step 7 - Execute The Pipeline
+
+Now for the cool bit. If you're using vscode then config files are already included in the repo that configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
+
+Pyspark should fire up and some stuff happens. The results output shows what yetl did should print to the terminal and look something like this:
+
+```json
+{                                                                               
+    "dataflow": {
+        "datasets": {
+            "034adab7-9914-4ad9-8b7a-1e2cce6b6475": {
+                "type": "Reader",
+                "dataflow_id": "73a1749b-952f-43fe-9f62-51bf1599d7ec",
+                "database": "demo_landing",
+                "table": "customer_preferences",
+                "path": "file:/Users/shaunryan/AzureDevOps/yetl.tutorial/data/landing/demo/20210101/customer_preferences_20210101.csv",
+                "tasks": {
+                    "0": {
+                        "task": "lazy_read",
+                        "message": {
+                            "path": "file:/Users/shaunryan/AzureDevOps/yetl.tutorial/data/landing/demo/20210101/customer_preferences_20210101.csv",
+                            "options": {
+                                "inferSchema": true,
+                                "header": true
+                            }
+                        },
+                        "start_datetime": "2022-11-13 14:38:09",
+                        "end_datetime": "2022-11-13 14:38:09",
+                        "seconds_duration": 0.309594
+                    }
+                }
+            },
+            "aaed955e-61b2-48d7-9506-cc4ab246c103": {
+                "type": "DeltaWriter",
+                "dataflow_id": "73a1749b-952f-43fe-9f62-51bf1599d7ec",
+                "database": "demo_raw",
+                "table": "customer_preferences",
+                "path": "file:/Users/shaunryan/AzureDevOps/yetl.tutorial/data/delta_lake/demo_raw/customer_preferences",
+                "tasks": {
+                    "0": {
+                        "task": "sql",
+                        "message": "CREATE DATABASE IF NOT EXISTS demo_raw",
+                        "start_datetime": "2022-11-13 14:38:09",
+                        "end_datetime": "2022-11-13 14:38:09",
+                        "seconds_duration": 0.008012
+                    },
+                    "1": {
+                        "task": "sql",
+                        "message": "CREATE TABLE demo_raw.customer_preferences ( `id` integer , `allow_contact` boolean , `_timeslice` timestamp , `_filepath_filename` string NOT NULL , `_partition_key` integer , `_dataset_id` string NOT NULL ) USING DELTA LOCATION 'file:/Users/shaunryan/AzureDevOps/yetl.tutorial/data/delta_lake/demo_raw/customer_preferences' PARTITIONED BY (`_partition_key`);",
+                        "start_datetime": "2022-11-13 14:38:09",
+                        "end_datetime": "2022-11-13 14:38:12",
+                        "seconds_duration": 2.931049
+                    },
+                    "2": {
+                        "task": "set_table_properties",
+                        "message": "ALTER TABLE `demo_raw`.`customer_preferences` SET TBLPROPERTIES ('yetl.metadata.datasetId' = 'True', 'yetl.schema.createIfNotExists' = 'True', 'delta.appendOnly' = 'False', 'delta.checkpoint.writeStatsAsJson' = 'True', 'delta.autoOptimize.autoCompact' = 'True', 'delta.autoOptimize.optimizeWrite' = 'True', 'delta.compatibility.symlinkFormatManifest.enabled' = 'False', 'delta.dataSkippingNumIndexedCols' = '-1', 'delta.logRetentionDuration' = 'interval 30 days', 'delta.deletedFileRetentionDuration' = 'interval 1 week', 'delta.enableChangeDataFeed' = 'True', 'delta.minReaderVersion' = '1', 'delta.minWriterVersion' = '2', 'delta.randomizeFilePrefixes' = 'False', 'delta.randomPrefixLength' = '2');",
+                        "start_datetime": "2022-11-13 14:38:12",
+                        "end_datetime": "2022-11-13 14:38:14",
+                        "seconds_duration": 2.265335
+                    },
+                    "3": {
+                        "task": "delta_table_write",
+                        "message": {
+                            "version": 2,
+                            "timestamp": "2022-11-13 14:38:15.354000",
+                            "userId": null,
+                            "userName": null,
+                            "operation": "WRITE",
+                            "operationParameters": {
+                                "mode": "Append",
+                                "partitionBy": "[\"_partition_key\"]"
+                            },
+                            "job": null,
+                            "notebook": null,
+                            "clusterId": null,
+                            "readVersion": 1,
+                            "isolationLevel": "Serializable",
+                            "isBlindAppend": true,
+                            "operationMetrics": {
+                                "numOutputRows": "10",
+                                "numOutputBytes": "2494",
+                                "numFiles": "1"
+                            },
+                            "userMetadata": null,
+                            "engineInfo": "Apache-Spark/3.3.0 Delta-Lake/2.1.1"
+                        },
+                        "start_datetime": "2022-11-13 14:38:09",
+                        "end_datetime": "2022-11-13 14:38:17",
+                        "seconds_duration": 8.072549
+                    }
+                }
+            }
+        },
+        "name": "customer_preferences_landing_to_raw",
+        "args": {
+            "table": "customer_preferences",
+            "timeslice": "2021-01-01 00:00:00.000000"
+        },
+        "started": "2022-11-13 14:38:09",
+        "started_utc": "2022-11-13 14:38:09",
+        "context_id": "df075697-9f47-48ad-8de8-cf448625e2b3",
+        "lineage": {
+            "73a1749b-952f-43fe-9f62-51bf1599d7ec": {
+                "aaed955e-61b2-48d7-9506-cc4ab246c103": {
+                    "depends_on": [
+                        "034adab7-9914-4ad9-8b7a-1e2cce6b6475"
+                    ]
+                }
+            }
+        },
+        "finished": "2022-11-13 14:38:17",
+        "finished_utc": "2022-11-13 14:38:17"
+    },
+    "warning": {
+        "count": 0
+    },
+    "error": {
+        "count": 0
+    }
+}
+```
