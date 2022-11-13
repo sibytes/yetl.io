@@ -1,18 +1,31 @@
 # Getting Started
 
+Clone the tutorial.
 
-## Step 1 - Installation
+```sh
+git clone https://github.com/sibytes/yetl.tutorial.git
+```
+
+Checkout the beginning of the tutorial.
+
+```sh
+git checkout getting-started-step-0
+```
+
+Explore the project. Currently there's not there at all, mostly a simply directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates.
+
+## Installation
 
 With the project home dir create a virtual python environment and install the required libraries. This will install `yetl-framework` and the python dependencies required for this tutorial.
 
 ```sh
-pip -m venv venv
+python -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Step 2 - Create a Yetl Project
+## Step 1 - Create a Yetl Project
 
 Using the Yetl cli create a new project:
 
@@ -41,7 +54,7 @@ YETL_ENVIRONMENT=local
 The `.env` can be used with vscode or your IDE to create environment variables. These environment variables are required by Yetl so that it know what environment it is and where the configuration resides.
 
 
-## Step 3 - Create Table Manifest
+## Step 2 - Create Table Manifest
 
 Using the cli run the table manifest creation on a sample of the source data. This will scan the files and create a table manifest. It's uses a regex parameter to pull out the table name from the filenames:
 
@@ -60,7 +73,7 @@ This will create a `project/demo` folder in the `./config` directory and the tab
 
 ![Project](../assets/Step 3 - 1.png)
 
-## Step 4 - Create Pipeline Template
+## Step 3 - Create Pipeline Template
 
 In this step will create a pipeline template for loading landing data from `./data/landing/demo` into a set of raw (bronze) deltalake tables. This template uses jinja and will be used to generate all the required pipeline configurations in the table manifest.
 
@@ -78,6 +91,7 @@ dataflow:
     {{demo_tables_table_name}}:
       type: Reader
       properties:
+        yetl.schema.corruptRecord: false
         yetl.schema.createIfNotExists: true
         yetl.metadata.timeslice: timeslice_file_date_format
         yetl.metadata.filepathFilename: true
@@ -91,11 +105,6 @@ dataflow:
           mode: PERMISSIVE
           inferSchema: false
           header: true
-      exceptions:
-          path: "delta_lake/demo_landing/{{table_name}}_exceptions"
-          database: demo_landing
-          table: "{{table_name}}_exceptions"
-  
 
   demo_raw:
     {{demo_tables_table_name}}:
