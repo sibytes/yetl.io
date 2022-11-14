@@ -16,14 +16,17 @@ Explore the project. Currently there's not much there at all, mostly a simply di
 
 ## Installation
 
-Within the project home dir create a virtual python environment and install the required libraries. This will install `yetl-framework` and the python dependencies required for this tutorial.
+Within the project home dir create a virtual python environment, activate it and install yetl.
 
 ```sh
 python -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install yetl-framework
 ```
+
+The python environment install isn't frozen into the git history since it's easier to keep the tutorial up to date.
+
 
 ## Step 1 - Create a Yetl Project
 
