@@ -662,7 +662,7 @@ with open(
     metdata = yaml.safe_load(f)
 tables: list = [t["table"] for t in metdata.get("tables")]
 
-yetl_wf.load(project, tables, landing_to_raw, timeslice, maxparallel)
+yetl_wf.load(project, tables, landing_to_raw, timeslice, OverwriteSave, maxparallel)
 ```
 
 Execute the pipeline again using F5. You should see the pipeline load both the tables in parallel threads. Whilst you may see not much gain running locally you will see huge differences between single execution and parallel execution when deploy it to and run it on a managed service spark cluster; databricks of course being the best choice!
