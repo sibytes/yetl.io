@@ -672,7 +672,7 @@ yetl_wf.load(project, tables, landing_to_raw, timeslice, OverwriteSave, maxparal
 Execute the pipeline again using F5. You should see the pipeline load both the tables in parallel threads. Whilst you may see not much gain running locally you will see huge differences between single execution and parallel execution when deploy it to and run it on a managed service spark cluster; databricks of course being the best choice!
 
 
-## Step 11 - Deploy To Databricks
+## Step 11 - Create Databricks Notebook
 
 Checkout the starting position.
 
@@ -680,3 +680,46 @@ Checkout the starting position.
 git checkout getting-started-step-10
 ```
 
+Create a databricks notebook by creating a python file at the root of the project called `./dbx_demo_notebook.py`.
+
+Add the following python code.
+
+```python
+# Databricks notebook source
+# MAGIC %pip install regex pyaml
+
+# COMMAND ----------
+
+from src.demo_landing_to_raw import landing_to_raw
+from yetl.flow import Timeslice, OverwriteSave
+from yetl.workflow import multithreaded as yetl_wf
+import yaml
+
+timeslice = Timeslice("*", "*", "*")
+project = "demo"
+maxparallel = 4
+
+path = f"./config/project/{project}/{project}_tables.yml"
+
+with open(path, "r", encoding="utf-8") as f:
+    metdata = yaml.safe_load(f)
+
+tables: list = [t["table"] for t in metdata.get("tables")]
+
+yetl_wf.load(project, tables, landing_to_raw, timeslice, OverwriteSave, maxparallel)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC select * from demo_raw.customer_details
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC select * from demo_raw.customer_preferences
+
+# COMMAND ----------
+
+dbutils.notebook.exit("YETL!")
+```
