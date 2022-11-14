@@ -656,10 +656,11 @@ timeslice = Timeslice("*", "*", "*")
 project = "demo"
 maxparallel = 2
 
-with open(
-    f"./config/project/{project}/{project}_tables.yml", "r", encoding="utf-8"
-) as f:
+path = f"./config/project/{project}/{project}_tables.yml"
+
+with open(path, "r", encoding="utf-8") as f:
     metdata = yaml.safe_load(f)
+
 tables: list = [t["table"] for t in metdata.get("tables")]
 
 yetl_wf.load(project, tables, landing_to_raw, timeslice, OverwriteSave, maxparallel)
