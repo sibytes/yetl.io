@@ -125,8 +125,8 @@ This is currently an experimental release, whilst it is tested and stable to a d
 
 As of now we're developing and testing with:
 
- - pyspark 3.3.0
- - delta-spark 2.1.0
+ - pyspark 3.3.1
+ - delta-spark 2.1.1
 
 
 
