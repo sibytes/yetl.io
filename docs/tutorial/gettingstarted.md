@@ -723,3 +723,22 @@ yetl_wf.load(project, tables, landing_to_raw, timeslice, OverwriteSave, maxparal
 
 dbutils.notebook.exit("YETL!")
 ```
+
+To deploy and run on databricks there's a number of one off steps to do on databricks. I won't cover them in too much detail here and use databricks references since they have an evolving platform. The steps are as follows:
+
+- Hookup your workspace user to your github account in the user settings using this [documentation](https://docs.databricks.com/repos/repos-setup.html)
+- Create a basic low cost cluster using this [documentation](https://docs.databricks.com/clusters/create-cluster.html)
+- Copy the sample data folder structure and data from `./data` to `/mnt/datalake/yetl_data` on the databricks DBFS store. This can be mounted lake storage to Azure Datalake or AWS if you have that configured or this can just be managed DBFS for our purposes.
+    - If you have mounted S3 or Azure Datalake then you can just use the many tools available to upload data to the correct path
+    - If using the databricks UI, upload the data to the `dfbs:filestore` location and then use [dbutils](https://docs.databricks.com/dev-tools/databricks-utils.html#file-system-utility-dbutilsfs) `dbutils.fs.mkdirs`, `dbutils.fs.cp` or `dbutils.fs.mv` to copy the data to `/mnt/datalake/yetl_data`
+- Create a global initialisation script using this [documentation](https://docs.databricks.com/clusters/init-scripts.html#global-init-scripts) and add the environment variables as follows. You may need to restart the cluster for it to take effect.
+
+```
+sudo echo export YETL_ENVIRONMENT='dbx_dev' >> /databricks/spark/conf/spark-env.sh
+```
+
+Git hub doesn't allow you to check out tags so to run this tutorial from this specific step we created a branch called `getting-started-step-11` that can be checked out in the github repo.
+
+Once the initial environment setup steps are done you can just run the notbeook and everything should work with no code changes!
+
+
