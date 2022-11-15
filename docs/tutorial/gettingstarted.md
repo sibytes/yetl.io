@@ -724,6 +724,8 @@ yetl_wf.load(project, tables, landing_to_raw, timeslice, OverwriteSave, maxparal
 dbutils.notebook.exit("YETL!")
 ```
 
+## Step 11 - Deploy & Execute On Databricks
+
 To deploy and run on databricks there's a number of one off steps to do on databricks. I won't cover them in too much detail here and use databricks references since they have an evolving platform. The steps are as follows:
 
 - Hookup your workspace user to your github account in the user settings using this [documentation](https://docs.databricks.com/repos/repos-setup.html)
