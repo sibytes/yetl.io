@@ -50,7 +50,13 @@ The configuration file sets the location of a number services that yetl uses to 
 
 ## datalake
 
-The data lake path that hosts the data. This path supports the jinja variable `{{cwd}}` which gets replaced with the current working directory at runtime thus allowing you to store development and test data sets in the project itself.
+The data lake path that hosts the data.
+
+The path supports the following jinja variables that are replaced at runtime:
+
+|variable|description|
+|-|-|
+| {{ cwd }} | Replaced with the current working directory at runtime thus allowing you to store development and test data sets in the project itself where ever you choose. Note this is usually inappropriate and not an obvious location for cloud environments since storage and compute is often separated|
 
 ## engine
 
@@ -100,7 +106,7 @@ The 1st key in the `pipeline_repo` configures the type of repo that is usde to s
 | sql_root | File path to where the runtime SQL statement files are held for datafeed pipelines |
 
 
-Both paths support the following jinja variables that is replaced at runtime:
+Both paths support the following jinja variables that are replaced at runtime:
 
 |variable|description|
 |-|-|

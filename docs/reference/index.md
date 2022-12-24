@@ -7,7 +7,7 @@ YETL allows you to define a datafeed using easy to maintain yaml and sql ddl con
 The components of a YETL project are:
 
 - [Environments](environments.md)
-- Projects
+- [Projects](projects.md)
 - Pipelines
 - Schema Repositories
 - Logging
