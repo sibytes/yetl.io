@@ -72,6 +72,7 @@ nav:
         - GettingStarted: tutorial/gettingstarted.md
     - Examples: examples.md
     - Reference:
+        - reference/index.md
         - Cli: reference/cli.md
         - Projects: reference/projects.md
         - Environments: reference/environments.md

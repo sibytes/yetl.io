@@ -6,7 +6,7 @@ Clone the tutorial.
 git clone https://github.com/sibytes/yetl.tutorial.git
 ```
 
-The latest main branch has the tutorial in it's complete state. I thoroughly recommend checking out the starting position and working through the tutorial to to full experience of yetl.
+The latest main branch has the tutorial in it's complete state. I thoroughly recommend checking out the starting position and working through the tutorial to get full development experience of yetl.
 
 
 ## Installation
@@ -29,7 +29,7 @@ The python environment install isn't frozen into the git history since it's easi
 git checkout getting-started-step-1
 ```
 
-Explore the project. Currently there's not much there at all, mostly a simply directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates. But hey, we're just getting started!
+Explore the project. Currently there's not much there at all, mostly a simple directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates. But hey, we're just getting started!
 
 Using the Yetl cli create a new project
 
@@ -737,8 +737,6 @@ To deploy and run on databricks there's a number of one off steps to do on datab
 sudo echo export YETL_ENVIRONMENT='dbx_dev' >> /databricks/spark/conf/spark-env.sh
 ```
 
-Git hub doesn't allow you to check out tags so to run this tutorial from this specific step we created a branch called `getting-started-step-11` that can be checked out in the github repo.
-
-Once the initial environment setup steps are done you can just run the notbeook and everything should work with no code changes!
+Using databricks repo's checkout `getting-started-step-11`. Once the initial environment setup steps are done you can just run the notbeook and everything should work with no code changes!
 
 
