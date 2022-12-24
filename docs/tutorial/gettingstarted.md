@@ -6,13 +6,8 @@ Clone the tutorial.
 git clone https://github.com/sibytes/yetl.tutorial.git
 ```
 
-Checkout the beginning of the tutorial.
+The latest main branch has the tutorial in it's complete state. I thoroughly recommend checking out the starting position and working through the tutorial to to full experience of yetl.
 
-```sh
-git checkout getting-started-step-0
-```
-
-Explore the project. Currently there's not much there at all, mostly a simply directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates. But hey, we're just getting started!
 
 ## Installation
 
@@ -30,11 +25,11 @@ The python environment install isn't frozen into the git history since it's easi
 
 ## Step 1 - Create a Yetl Project
 
-Checkout the starting position.
-
 ```sh
-git checkout getting-started-step-0
+git checkout getting-started-step-1
 ```
+
+Explore the project. Currently there's not much there at all, mostly a simply directory structure containing some date partitioned test data to simulate our landing data partitioned by timeslice dates. But hey, we're just getting started!
 
 Using the Yetl cli create a new project
 
@@ -93,7 +88,7 @@ This will create a `project/demo` folder in the `./config` directory and the tab
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-2
+git checkout getting-started-step-3
 ```
 
 In this step will create a pipeline template for loading landing data from `./data/landing/demo` into a set of raw (bronze) deltalake tables. This template uses jinja and will be used to generate all the required pipeline configurations in the table manifest.
@@ -138,6 +133,7 @@ dataflow:
       properties:
         yetl.metadata.datasetId: true
         yetl.schema.createIfNotExists: true
+      deltalake_properties:
         delta.appendOnly: false
         delta.checkpoint.writeStatsAsJson: true
         delta.autoOptimize.autoCompact: true       
@@ -166,7 +162,7 @@ dataflow:
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-3
+git checkout getting-started-step-4
 ```
 
 In this step we will use the pipeline template `./config/project/demo/landing_to_raw.yaml` to create a pipeline configuration for each table in the table manifest at `./config/project/demo/demo_tables.yml`
@@ -185,7 +181,7 @@ landing_to_raw.yaml \
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-4
+git checkout getting-started-step-5
 ```
 
 In this step we'll use python and yetl to code a function that loads our tables.
@@ -233,8 +229,6 @@ def landing_to_raw(
 
     destination_table = f"{_PROJECT}_raw.{table}"
     dataflow.destination_df(destination_table, df, save=save)
-
-    context.log.info(f"Loaded table {destination_table}")
 ```
 
 
@@ -243,7 +237,7 @@ def landing_to_raw(
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-5
+git checkout getting-started-step-6
 ```
 
 Create a `main.py` python file in the project root.
@@ -259,7 +253,7 @@ from src.demo_landing_to_raw import landing_to_raw
 from yetl.flow import Timeslice
 import json
 
-timeslice = Timeslice(2021, 1, 1)
+timeslice = Timeslice(year=2021, month=1, day=1)
 
 table = "customer_details"
 results = landing_to_raw(table=table, timeslice=timeslice)
@@ -277,7 +271,7 @@ print(results)
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-6
+git checkout getting-started-step-7
 ```
 
 Now for the cool bit. If you're using vscode then config files in `.vscode` included with the repo already configure `main.py` to execute so you can just hit F5. Alternatively run the `main.py` however you choose.
@@ -318,8 +312,12 @@ Result:
 Query the customer_preferences table
 
 ```python
-df = spark.sql("select * demo_raw.customer_preferences")
+df = spark.sql("select * from demo_raw.customer_preferences")
 df.show()
+```
+
+To exit:
+```python
 exit()
 ```
 
@@ -485,7 +483,7 @@ yetl will create spark schema's for the files it loads since they don't exist ye
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-7
+git checkout getting-started-step-8
 ```
 
 Typically you would now refine the spark schema's by profiling the data. Spark does an ok job inferring schema's but they can always be improved. Yetl does the hard graft of auto creating all the schema's you'll need for all your tables in a project. To keep the cadence of the tutorial we'll ignore this refinement.
@@ -497,8 +495,8 @@ from src.demo_landing_to_raw import landing_to_raw
 from yetl.flow import Timeslice
 import json
 
-# timeslice = Timeslice(2021, 1, 1)
-timeslice = Timeslice(2021, 1, 2)
+# timeslice = Timeslice(year=2021, month=1, day=1)
+timeslice = Timeslice(year=2021, month=1, day=2)
 
 table = "customer_details"
 results = landing_to_raw(table=table, timeslice=timeslice)
@@ -552,7 +550,7 @@ Result:
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-8
+git checkout getting-started-step-9
 ```
 
 The data loaded incrementally because that's what it's configured to do in the write properties of the pipeline configuration, also operationally this is typically what's required so it makes sense for that to live in the configuration. However what if we want to reload all of the data or a given year or month occasionally as required? Since projects and data feeds don't always go as expected. Yetl supports this very elegantly!
@@ -568,9 +566,9 @@ from src.demo_landing_to_raw import landing_to_raw
 from yetl.flow import Timeslice, OverwriteSave
 import json
 
-# timeslice = Timeslice(2021, 1, 1)
-# timeslice = Timeslice(2021, 1, 2)
-timeslice = Timeslice("*", "*", "*")
+# timeslice = Timeslice(year=2021, month=1, day=1)
+# timeslice = Timeslice(year=2021, month=1, day=2)
+timeslice = Timeslice(year="*", month="*", day="*")
 
 table = "customer_details"
 results = landing_to_raw(table=table, timeslice=timeslice, save=OverwriteSave)
@@ -636,7 +634,7 @@ Result:
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-9
+git checkout getting-started-step-10
 ```
 
 Now we have a simple pipeline to on-board all of our landing data into raw delta tables. The code we have so far has just been loading one table after another, this is not massively efficient. If we have a spark cluster then we may as well make use of it. We can use a workflow orchestrator for complex workflows which requires more coding, and for some workloads this is entirely nessecary. 
@@ -653,9 +651,9 @@ from yetl.flow import Timeslice, OverwriteSave
 from yetl.workflow import multithreaded as yetl_wf
 import yaml
 
-# timeslice = Timeslice(2021, 1, 1)
-# timeslice = Timeslice(2021, 1, 2)
-timeslice = Timeslice("*", "*", "*")
+# timeslice = Timeslice(year=2021, month=1, day=1)
+# timeslice = Timeslice(year=2021, month=1, day=2)
+timeslice = Timeslice(year="*", month="*", day="*")
 project = "demo"
 maxparallel = 2
 
@@ -677,7 +675,7 @@ Execute the pipeline again using F5. You should see the pipeline load both the t
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-10
+git checkout getting-started-step-11
 ```
 
 Create a databricks notebook by creating a python file at the root of the project called `./dbx_demo_notebook.py`.
@@ -695,7 +693,7 @@ from yetl.flow import Timeslice, OverwriteSave
 from yetl.workflow import multithreaded as yetl_wf
 import yaml
 
-timeslice = Timeslice("*", "*", "*")
+timeslice = Timeslice(year="*", month="*", day="*")
 project = "demo"
 maxparallel = 4
 
