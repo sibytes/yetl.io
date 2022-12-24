@@ -1,6 +1,6 @@
 # Tutorial
 
-Yetl is a python Data Engineering framework for Spark and DeltaLake; it therefore assumes some basic knowledge of Data Engineering, Python, PySpark, Spark and DeltaLake and recognise the need and benefits of using a data engineering framework.
+Yetl is a python Data Engineering framework for Spark and DeltaLake; it therefore assumes some basic knowledge of Data Engineering, Python, PySpark, Spark and DeltaLake and recognises the need and benefits of using a data engineering framework.
 
 The content can be obtained by cloning the [yetl.tutorial](https://github.com/sibytes/yetl.tutorial) repo:
 
@@ -8,13 +8,13 @@ The content can be obtained by cloning the [yetl.tutorial](https://github.com/si
 git clone https://github.com/sibytes/yetl.tutorial.git
 ```
 
-The repo is tagged at each step of the tutorial. Tags are named the same as step titles within the tutorial and mark the code state reached at the end of that step. So by checking out a specific step will place the code as it should be at the end of that tutorial step. For example the following will checkout the code as should be at the end of step 0. 
+The repo is branched at each step of the tutorial. Branches are named the same as step titles within the tutorial and mark the code state reached at the end of that step. So by checking out a specific step will place the code as it should be at the end of that tutorial step. For example the following will checkout the code as should be at the end of step 0 for the getting-started tutorial.
 
 ```sh
-git checkout tags/step-0
+git checkout getting-started-step-0
 ```
 
-At each step of the tutorial you can simply checkout the step you've finished working on to ensure you're starting the next step with everything as required. Alternatively if you're more confident with git and the topics then checkout the tag into a working branch and make your own commits. The remote repo is locked so commits cannot be pushed.
+At each step of the tutorial you can simply checkout the step you've finished working on to ensure you're starting the next step with everything as required. Alternatively if you're more confident with git and the topics then checkout the starting position and just work your way through the tutorial. The remote repo is locked so commits cannot be pushed.
 
 
 Tutorials for learning about yetl:
