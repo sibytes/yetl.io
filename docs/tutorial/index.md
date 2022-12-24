@@ -8,13 +8,13 @@ The content can be obtained by cloning the [yetl.tutorial](https://github.com/si
 git clone https://github.com/sibytes/yetl.tutorial.git
 ```
 
-The repo is branched at each step of the tutorial. Branches are named the same as step titles within the tutorial and mark the code state reached at the end of that step. So by checking out a specific step will place the code as it should be at the end of that tutorial step. For example the following will checkout the code as should be at the end of step 0 for the getting-started tutorial.
+The repo is branched at each step of the tutorial. Branches are named the same as step titles within the tutorial and mark the code state reached at the end of that step. So by checking out a specific step will place the code as it should be at the end of that tutorial step. For example the following will checkout the code as should be at the beginning of step 1 for the getting-started tutorial.
 
 ```sh
-git checkout getting-started-step-0
+git checkout getting-started-step-1
 ```
 
-At each step of the tutorial you can simply checkout the step you've finished working on to ensure you're starting the next step with everything as required. Alternatively if you're more confident with git and the topics then checkout the starting position and just work your way through the tutorial. The remote repo is locked so commits cannot be pushed.
+At each step of the tutorial you can simply checkout the next step of the tutorial to ensure you're starting the next step with everything as required. Alternatively if you're more confident with git and the topics then checkout the starting position and just work your way through the tutorial. The remote repo is locked so commits cannot be pushed.
 
 
 Tutorials for learning about yetl:
