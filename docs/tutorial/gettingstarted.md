@@ -138,6 +138,7 @@ dataflow:
       properties:
         yetl.metadata.datasetId: true
         yetl.schema.createIfNotExists: true
+      deltalake_properties:
         delta.appendOnly: false
         delta.checkpoint.writeStatsAsJson: true
         delta.autoOptimize.autoCompact: true       
@@ -233,8 +234,6 @@ def landing_to_raw(
 
     destination_table = f"{_PROJECT}_raw.{table}"
     dataflow.destination_df(destination_table, df, save=save)
-
-    context.log.info(f"Loaded table {destination_table}")
 ```
 
 
@@ -259,7 +258,7 @@ from src.demo_landing_to_raw import landing_to_raw
 from yetl.flow import Timeslice
 import json
 
-timeslice = Timeslice(2021, 1, 1)
+timeslice = Timeslice(year=2021, month=1, day=1)
 
 table = "customer_details"
 results = landing_to_raw(table=table, timeslice=timeslice)
@@ -497,8 +496,8 @@ from src.demo_landing_to_raw import landing_to_raw
 from yetl.flow import Timeslice
 import json
 
-# timeslice = Timeslice(2021, 1, 1)
-timeslice = Timeslice(2021, 1, 2)
+# timeslice = Timeslice(year=2021, month=1, day=1)
+timeslice = Timeslice(year=2021, month=1, day=2)
 
 table = "customer_details"
 results = landing_to_raw(table=table, timeslice=timeslice)
@@ -568,9 +567,9 @@ from src.demo_landing_to_raw import landing_to_raw
 from yetl.flow import Timeslice, OverwriteSave
 import json
 
-# timeslice = Timeslice(2021, 1, 1)
-# timeslice = Timeslice(2021, 1, 2)
-timeslice = Timeslice("*", "*", "*")
+# timeslice = Timeslice(year=2021, month=1, day=1)
+# timeslice = Timeslice(year=2021, month=1, day=2)
+timeslice = Timeslice(year="*", month="*", day="*")
 
 table = "customer_details"
 results = landing_to_raw(table=table, timeslice=timeslice, save=OverwriteSave)
@@ -653,9 +652,9 @@ from yetl.flow import Timeslice, OverwriteSave
 from yetl.workflow import multithreaded as yetl_wf
 import yaml
 
-# timeslice = Timeslice(2021, 1, 1)
-# timeslice = Timeslice(2021, 1, 2)
-timeslice = Timeslice("*", "*", "*")
+# timeslice = Timeslice(year=2021, month=1, day=1)
+# timeslice = Timeslice(year=2021, month=1, day=2)
+timeslice = Timeslice(year="*", month="*", day="*")
 project = "demo"
 maxparallel = 2
 
@@ -695,7 +694,7 @@ from yetl.flow import Timeslice, OverwriteSave
 from yetl.workflow import multithreaded as yetl_wf
 import yaml
 
-timeslice = Timeslice("*", "*", "*")
+timeslice = Timeslice(year="*", month="*", day="*")
 project = "demo"
 maxparallel = 4
 
