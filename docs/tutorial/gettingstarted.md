@@ -63,7 +63,7 @@ The `.env` can be used with vscode or your IDE to create environment variables. 
 Checkout the starting position.
 
 ```sh
-git checkout getting-started-step-1
+git checkout getting-started-step-2
 ```
 
 Using the cli run the table manifest creation on a sample of the source data. This will scan the files and create a table manifest. It's uses a regex parameter to pull out the table name from the filenames:
