@@ -1,6 +1,6 @@
 # Overview
 
-YETL allows you to define a datafeed using easy to maintain yaml and sql ddl configuration that takes care of the typical mundane requirements of a datafeed whilst providing an api to implement what's special about them using the python DSL and SQL of a data engine (e.g. spark). It also allows you to configure environments including a local envinorment giving you complete control to use the best software engineering practices to implement datafeeds.
+YETL allows you to define a datafeed using easy to maintain yaml and sql ddl configuration that takes care of the typical mundane requirements of a datafeed whilst providing an api to implement what's special about them using the python DSL and SQL of a data engine (e.g. spark). It also allows you to configure environments including a local environment giving you complete control to use the best software engineering practices to implement datafeeds.
 
 ## The Anatomy of YETL'ing Datafeeds!
 
