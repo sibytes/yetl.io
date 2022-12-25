@@ -125,5 +125,7 @@ pipeline_repo:
 
 ## spark_schema_repo
 
+Currently since the only supported data engine processing is spark then yetl also requires you to configure a spark schema repo. The spark schema repo is where yetl will create, store and load spark schema's for loading data using schema on read.
+
 ## deltalake_schema_repo
 
