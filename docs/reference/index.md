@@ -25,3 +25,6 @@ Configuration resides at root of the yetl source code project folder. By default
 YETL_ROOT=./config
 ```
 
+The best way to easily create a new spark yetl project is to use the starter [template](https://github.com/sibytes/yetl.tutorial/tree/getting-started-step-1) from the tutorial and initialise it with the [cli](cli.md) init command. The [cli](cli.md) is also usde to build pipelines from templates. 
+
+Also see the [getting-started](../tutorial/gettingstarted.md) tutorial to work through the creation and setup of yetl project.
