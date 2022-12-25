@@ -94,7 +94,7 @@ engine:
 
 The `pipeline_repo` configures where the built pipeline configuration is stored that the yetl uses when running data flow pipelines.
 
-The 1st key in the `pipeline_repo` configures the type of repo that is usde to store the pipeline configuration. Yetl currently provides the following types of pipeline repo's:
+The 1st key in the `pipeline_repo` configures the type of repo that is used to store the pipeline configuration. Yetl currently provides the following types of pipeline repo's:
 
 - `pipeline_file` - stores the pipeline configuration in yaml files in the project file system.
 
@@ -112,7 +112,7 @@ Both paths support the following jinja variables that are replaced at runtime:
 |-|-|
 | {{ project }} | The name of the datafeed project, since each source code project can have multiple yetl datafeed projects |
 
-To keep the project intuitively organised wihin the source code project it's intuitively recommended to keep them in location configured in the `YETL_ROOT` environment variable which is `./config` by default.
+To keep the project intuitively organised wihin the source code project it's recommended to keep them in location configured in the `YETL_ROOT` environment variable which is `./config` by default.
 
 Example
 
@@ -127,5 +127,50 @@ pipeline_repo:
 
 Currently since the only supported data engine processing is spark then yetl also requires you to configure a spark schema repo. The spark schema repo is where yetl will create, store and load spark schema's for loading data using schema on read.
 
+The 1st key in the `spark_schema_repo` configures the type of repo that is used to store the spark schema. Yetl currently provides the following types of repo's:
+
+- `spark_schema_file` - stores spark schema as yaml files in the project file system.
+
+### spark_schema_file
+
+|property|description|
+|-|-|
+| spark_schema_root | The root path to where the runtime yaml spark schema files are saved to / or loaded from when schema on read loading files using the [Reader]() dataset|
+
+Schema defintitions use the native form of spark schema and are stored in a sub-directory that matches the name of the database and in a filename that matches the name of the table. See the [Reader]() dataset for more details.
+
+To keep the project intuitively organised wihin the source code project it's recommended to keep them in location configured in the `YETL_ROOT` environment variable which is `./config` by default.
+
+Example
+
+```yaml
+spark_schema_repo:
+  spark_schema_file:
+    spark_schema_root: ./config/schema/spark
+```
+
 ## deltalake_schema_repo
 
+The deltalake schema repo is where yetl will create, store and load deltalake schema's for creating and maintaining deltalake tables.
+
+The 1st key in the `deltalake_schema_repo` configures the type of repo that is used to store the table defintions for deltalake tables. Yetl currently provides the following types of repo's:
+
+- `deltalake_sql_file` - stores deltalake tables using SQL create table files in the project file system.
+
+### deltalake_sql_file
+
+|property|description|
+|-|-|
+| deltalake_schema_root | The root path to where the runtime create table SQL files are saved to / or loaded from when loading data into deltalake tables using the [DeltaWriter]() dataset|
+
+Schema defintitions use the deltalake SQL language and are stored in a sub-directory that matches the name of the database and in a filename that matches the name of the table. See the [DeltaWriter]() dataset for more details.
+
+To keep the project intuitively organised wihin the source code project it's recommended to keep them in location configured in the `YETL_ROOT` environment variable which is `./config` by default.
+
+Example
+
+```yaml
+deltalake_schema_repo:
+  deltalake_sql_file:
+    deltalake_schema_root: ./config/schema/deltalake
+```
