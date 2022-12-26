@@ -46,7 +46,9 @@ deltalake_schema_repo:
     deltalake_schema_root: ./config/schema/deltalake
 ```
 
-The configuration file sets the location of a number services that yetl uses to configure and execute datafeed pipelines. That are:
+The configuration file sets the location of a number services that yetl uses to configure and execute datafeed pipelines. 
+
+These services are:
 
 ## datalake
 
