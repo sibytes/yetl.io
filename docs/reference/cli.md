@@ -18,22 +18,20 @@ python -m yetl --help
 
 Yetl has the following commands:
 
-
 |command|description|
 |-|-|
-| build | Use manifest config file and the pipeline jinja template to build a pipeline configuration for each table |
-| create-table-manifest | Create manifest configuration file containing the names of tables we want create yetl data pipelines on |
 | init | Initialise the configuration directory with the required structure and start config files |
+| create-table-manifest | Create manifest configuration file containing the names of tables we want create yetl data pipelines on |
+| build | Use table manifest file and the pipeline jinja template to build a pipeline configuration for each table |
 
-
-### build
+### init
 
 Description: Use manifest config file and the pipeline jinja template to build a pipeline configuration for each table
 
 Usage:
 
 ```sh
-python -m yetl build PROJECT METADATA_FILE TEMPLATE_FILE BUILD_DIR
+python -m yetl init [OPTIONS] project 
 ```
 
 Arguments:
@@ -41,9 +39,23 @@ Arguments:
 |argument|type|default|required|
 |-|-|-|-|
 |project|text|none|yes|
-|metadata_file|text|none|yes|
-|template_file|text|none|yes|
-|build_dir|text|none|yes|
+
+
+Options:
+
+|option|type|default|
+|-|-|-|
+|--home-dir|text|.|
+|--config-folder|text|config|
+|--overwrite or --no-overwrite||no-overwrite|
+
+Example:
+
+From [getting-started](../tutorial/gettingstarted.md)
+
+```sh
+python -m yetl init demo 
+```
 
 ### create-table-manifest
 
@@ -52,7 +64,7 @@ Description: Use manifest config file and the pipeline jinja template to build a
 Usage:
 
 ```sh
-python -m yetl create-table-manifest [OPTIONS] PROJECT BUILD_DIR SOURCE_TYPE SOURCE_DIR
+python -m yetl create-table-manifest [OPTIONS] project build_dir source_type source_dir
 ```
 
 Arguments:
@@ -71,16 +83,28 @@ Options:
 |--filename|text|*|
 |--extract-regex|text|none|
 
+Example:
 
+From [getting-started](../tutorial/gettingstarted.md)
 
-### init
+```sh
+python -m yetl create-table-manifest \
+"demo" \
+"./config/project"  \
+File \
+"./data/landing/demo" \
+--filename "*" \
+--extract-regex "^[a-zA-Z_]+[a-zA-Z]+"
+```
 
-Description: Use manifest config file and the pipeline jinja template to build a pipeline configuration for each table
+### build
+
+Description: Use table manifest file and the pipeline jinja template to build a pipeline configuration for each table
 
 Usage:
 
 ```sh
-python -m yetl init [OPTIONS] PROJECT 
+python -m yetl build project metadata_file template_file build_dir
 ```
 
 Arguments:
@@ -88,13 +112,18 @@ Arguments:
 |argument|type|default|required|
 |-|-|-|-|
 |project|text|none|yes|
+|metadata_file|text|none|yes|
+|template_file|text|none|yes|
+|build_dir|text|none|yes|
 
+Example:
 
-Options:
+From [getting-started](../tutorial/gettingstarted.md)
 
-|option|type|default|
-|-|-|-|
-|--home-dir|text|.|
-|--config-folder|text|config|
-|--overwrite or --no-overwrite||no-overwrite|
-
+```sh
+python -m yetl build \
+demo \
+demo_tables.yml \
+landing_to_raw.yaml \
+./config
+```
