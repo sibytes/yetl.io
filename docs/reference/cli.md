@@ -112,9 +112,9 @@ Arguments:
 |argument|type|default|required|description|
 |-|-|-|-|-|
 |project|text|none|yes| name of the project to build the pipeline into |
-|metadata_file|text|none|yes| the name of the table manifest configuration file, this file should be located are $YETL_ROOT/project/$project/$metadata_file |
-|template_file|text|none|yes| the name of the jinja yaml template file for the pipelines |
-|build_dir|text|none|yes| the yetl configuration home directory where the pipelines built from the template and table manifest will be created |
+|metadata_file|text|none|yes| the name of the table manifest configuration file located at $build_dir/project/$project/$metadata_file |
+|template_file|text|none|yes| the name of the jinja pipeline yaml template file located at $build_dir/project/$project/$template_file |
+|build_dir|text|none|yes| the yetl configuration home directory where the pipelines will be built $build_dir/$project/pipelines/$tablename_$template_file |
 
 Example:
 
@@ -132,6 +132,13 @@ This command will use the files at:
 - metadata_file = ./config/project/demo/demo_tables.yml
 - template_file = ./config/project/demo/landing_to_raw.yaml
 
-To build a pipeline configuration for each table in `demo_tables.yml` using the template file `landing_to_raw.yaml` and store it in:
+To build a pipeline configuration for each table in `demo_tables.yml` using the template file `landing_to_raw.yaml` and store it in the build location. 
 
-- build_dir = ./config/project/$tablename_landing_to_raw.yaml 
+For example if there are 2 tables:
+- customer_detail
+- customer_preferences
+
+It will build 2 pipelines files
+
+- ./config/demo/customer_detail_landing_to_raw.yaml 
+- ./config/demo/customer_preferences_landing_to_raw.yaml 
