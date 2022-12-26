@@ -130,17 +130,17 @@ landing_to_raw.yaml \
 
 This command will use the files at:
 
-- metadata_file = ./config/project/demo/demo_tables.yml
-- template_file = ./config/project/demo/landing_to_raw.yaml
+- metadata_file = [./config/project/demo/demo_tables.yml](https://github.com/sibytes/yetl.tutorial/blob/main/config/project/demo/demo_tables.yml)
+- template_file = [./config/project/demo/landing_to_raw.yaml](https://github.com/sibytes/yetl.tutorial/blob/main/config/project/demo/landing_to_raw.yaml)
 
-To build a pipeline configuration for each table in `demo_tables.yml` using the template file `landing_to_raw.yaml` and store it in the build location. 
+To build a pipeline configuration for each table in `demo_tables.yml` using the template file `landing_to_raw.yaml` and store it in the build location [./config](https://github.com/sibytes/yetl.tutorial/tree/main/config) in subdirectory named after the project [.config/demo/pipelines](https://github.com/sibytes/yetl.tutorial/tree/main/config/demo/pipelines). 
 
 For example if there are 2 tables:
 
-- customer_detail
+- customer_details
 - customer_preferences
 
 It will build 2 pipelines files
 
-- ./config/demo/customer_detail_landing_to_raw.yaml 
-- ./config/demo/customer_preferences_landing_to_raw.yaml 
+- [./config/demo/pipelines/customer_details_landing_to_raw.yaml](https://github.com/sibytes/yetl.tutorial/blob/main/config/demo/pipelines/customer_details_landing_to_raw.yaml)
+- [./config/demo/pipelines/customer_preferences_landing_to_raw.yaml](https://github.com/sibytes/yetl.tutorial/blob/main/config/demo/pipelines/customer_preferences_landing_to_raw.yaml)
