@@ -129,12 +129,14 @@ landing_to_raw.yaml \
 ```
 
 This command will use the files at:
+
 - metadata_file = ./config/project/demo/demo_tables.yml
 - template_file = ./config/project/demo/landing_to_raw.yaml
 
 To build a pipeline configuration for each table in `demo_tables.yml` using the template file `landing_to_raw.yaml` and store it in the build location. 
 
 For example if there are 2 tables:
+
 - customer_detail
 - customer_preferences
 
