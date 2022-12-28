@@ -70,7 +70,6 @@ nav:
     - Tutorial: 
         - tutorial/index.md
         - GettingStarted: tutorial/gettingstarted.md
-    - Examples: examples.md
     - Reference:
         - reference/index.md
         - Cli: reference/cli.md
@@ -85,5 +84,13 @@ nav:
         - Destinations:
           - reference/destinations/index.md
           - Delta Writer: reference/destinations/destination_delta_writer.md
+    - Patterns:
+        - patterns/index.md
+        - Bronze: 
+          - patterns/bronze/index.md
+        - Silver: 
+          - patterns/silver/index.md
+        - Gold: 
+          - patterns/gold/index.md
     - About: about.md
 site_name: YETL
