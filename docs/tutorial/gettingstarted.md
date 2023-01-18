@@ -148,7 +148,7 @@ dataflow:
       path_date_format: "%Y%m%d"
       file_date_format: "%Y%m%d"
       format: csv
-      path: "landing/demo/{{timeslice_path_date_format}}/{{demo_tables_table_name}}_{{timeslice_file_date_format}}.csv"
+      path: "landing/demo/{{timeslice_path_date_format}}/{{table.name}}_{{timeslice_file_date_format}}.csv"
       read:
         auto: true
         options:
@@ -157,9 +157,9 @@ dataflow:
           header: true
       {% if table.enable_exceptions %}
       exceptions:
-          path: "delta_lake/{{ database_name }}/{{ table_name }}_exceptions"
+          path: "delta_lake/{{ database_name }}/{{ table.name }}_exceptions"
           database: "{{ database_name }}"
-          table: "{{ table_name }}_exceptions"
+          table: "{{ table.name }}_exceptions"
       {% if table.thresholds %}
       thresholds:
       {% filter indent(width=8) %}
