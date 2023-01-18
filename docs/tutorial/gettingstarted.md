@@ -69,19 +69,52 @@ git checkout getting-started-step-2
 Using the cli run the table manifest creation on a sample of the source data. This will scan the files and create a table manifest. It's uses a regex parameter to pull out the table name from the filenames:
 
 ```sh
-python -m yetl create-table-manifest \
+python -m yetl register-tables \
 "demo" \
 "./config/project"  \
 File \
 "./data/landing/demo" \
 --filename "*" \
 --extract-regex "^[a-zA-Z_]+[a-zA-Z]+"
+--enable-exceptions
+--no-disable-thresholds
 ```
 
 This will create a `project/demo` folder in the `./config` directory and the table manifest from the data files it scanned. The project folder is where we'll create our pipeline templates that we will build into pipelines.
 
 
 ![Project](../assets/Step 3 - 1.png)
+
+This is starting point, now refine the file a little:
+
+- add in the keys
+- take out the thresholds for customer preferences
+
+The result should be:
+
+```yaml
+database: demo
+tables:
+- keys:
+    - id
+  name: customer_preferences
+- enable_exceptions: true
+  keys:
+    - id
+  name: customer_details
+  thresholds:
+    error:
+      exception_count: 0
+      exception_percent: 80
+      max_rows: 100000000
+      min_rows: 0
+    warning:
+      exception_count: 0
+      exception_percent: 0
+      max_rows: 100000000
+      min_rows: 1
+```
+
 
 ## Step 3 - Create Pipeline Template
 
@@ -95,22 +128,23 @@ In this step will create a pipeline template for loading landing data from `./da
 
 Create the file using the UI or the command:
 ```sh
-touch ./config/project/demo/landing_to_raw.yaml
+touch ./config/project/demo/landing_to_raw.yaml.j2
 ```
 
-Copy and paste the following configuration into `landing_to_raw.yaml`:
+Copy and paste the following configuration into `landing_to_raw.yaml.j2`:
 
 ```yaml
 dataflow:
 
   demo_landing:
-    {{demo_tables_table_name}}:
-      type: Reader
+    {{table.name}}:
+      type: Reader     
+
       properties:
-        yetl.schema.corruptRecord: false
         yetl.schema.createIfNotExists: true
         yetl.metadata.timeslice: timeslice_file_date_format
         yetl.metadata.filepathFilename: true
+
       path_date_format: "%Y%m%d"
       file_date_format: "%Y%m%d"
       format: csv
@@ -121,11 +155,23 @@ dataflow:
           mode: PERMISSIVE
           inferSchema: false
           header: true
+      {% if table.enable_exceptions %}
+      exceptions:
+          path: "delta_lake/{{ database_name }}/{{ table_name }}_exceptions"
+          database: "{{ database_name }}"
+          table: "{{ table_name }}_exceptions"
+      {% if table.thresholds %}
+      thresholds:
+      {% filter indent(width=8) %}
+        {{to_yaml(table.thresholds)}}
+      {% endfilter %}
+      {% endif %}
+      {% endif %}
+  
 
   demo_raw:
-    {{demo_tables_table_name}}:
+    {{table.name}}:
       type: DeltaWriter
-
       partitioned_by:
         - _partition_key
 
@@ -133,7 +179,6 @@ dataflow:
       properties:
         yetl.metadata.datasetId: true
         yetl.schema.createIfNotExists: true
-      deltalake_properties:
         delta.appendOnly: false
         delta.checkpoint.writeStatsAsJson: true
         delta.autoOptimize.autoCompact: true       
@@ -149,7 +194,7 @@ dataflow:
         delta.randomPrefixLength: 2
       
       format: delta
-      path: delta_lake/demo_raw/{{demo_tables_table_name}}
+      path: delta_lake/demo_raw/{{table.name}}
       write:
         mode: append
         options:
@@ -172,9 +217,13 @@ Build the pipeline configurations by executing:
 python -m yetl build \
 demo \
 demo_tables.yml \
-landing_to_raw.yaml \
+landing_to_raw.yaml.j2 \
 ./config
 ```
+
+This will create a pipeline configuration for each table that we registered.
+
+![Project](../assets/Step 4 - 1.png)
 
 ## Step 5 - Code Pipeline
 
