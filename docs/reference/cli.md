@@ -57,14 +57,14 @@ From [getting-started](../tutorial/gettingstarted.md)
 python -m yetl init demo 
 ```
 
-### create-table-manifest
+### register-tables
 
 Description: Use manifest config file and the pipeline jinja template to build a pipeline configuration for each table
 
 Usage:
 
 ```sh
-python -m yetl create-table-manifest [OPTIONS] project build_dir source_type source_dir
+python -m yetl register-tables [OPTIONS] project build_dir source_type source_dir
 ```
 
 Arguments:
@@ -82,19 +82,23 @@ Options:
 |-|-|-|
 |--filename|text|*|
 |--extract-regex|text|none|
+|--enable-exceptions or no-enable-exceptions||--enable-exceptions|
+|--disable-thresholds or no-disable-thresholds||--disable-thresholds|
 
 Example:
 
 From [getting-started](../tutorial/gettingstarted.md)
 
 ```sh
-python -m yetl create-table-manifest \
+python -m yetl register-tables \
 "demo" \
 "./config/project"  \
 File \
 "./data/landing/demo" \
 --filename "*" \
---extract-regex "^[a-zA-Z_]+[a-zA-Z]+"
+--extract-regex "^[a-zA-Z_]+[a-zA-Z]+" \
+--enable-exceptions \
+--no-disable-thresholds
 ```
 
 ### build
