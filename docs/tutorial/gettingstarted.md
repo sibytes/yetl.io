@@ -85,7 +85,7 @@ This will create a `project/demo` folder in the `./config` directory and the tab
 
 ![Project](../assets/Step 3 - 1.png)
 
-This is starting point, now refine the file a little:
+This is a starting point, now refine the file a little:
 
 - add in the keys
 - take out the thresholds for customer preferences
