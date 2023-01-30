@@ -6,16 +6,16 @@ The source reader is the simple batch reader that you can execute in spark. Yetl
 df = spark.read.format(format).options(**options).load(path)
 ```
 
-How the SQL reader also has a number of features to make life easy loading from a data lake:
+However the SQL reader also has a number of features to make life easy loading from a landing area blob storage into a datalake:
 
 - Slice date partition format parameterisation into the file path
 - Using wildcards to load multiple slice date periods
 - Handle schema exceptions and load them into a deltalake table
 - Set exception and warning thresholds for schema exceptions
 - Set exception and warning thresholds for the min and max number of expected records
-- Automatically infer the 1st load, create a spark schema and save it into the schema repo
+- Automatically infer the spark schema op the 1st load, create a spark schema and save it into the schema repo
 - Add the file, path and or filepath as columns to the data frame
-- Adds the slice date into the dataframe of the relative data
+- Add the slice date into the dataframe of the relative data
 - Configure the corrupt record on Permissive loads
 
 ## Example
@@ -100,7 +100,7 @@ dataflow:
 
 Yetl will always gracefully handle data flow errors and succeed; however it will give details of warnings and errors in the result set. Errors will have typically stopped the data flow proceeding, warnings however will not. This should allow the calling orchestrator code to get the detailed information and handle it appropriatly thus supporting any orchestrator setting.
 
-Here is an exmaple of the error and warning section of the results set for settings above. Notice the errors and warnings are configure the same so give the same exceptions; because error thresholds the dataflow would have not proceeded. However they can be set independently allowing more elegant handling. 
+Here is an example of the error and warning section of the results set for settings above. Notice the errors and warnings are configure the same so give the same exceptions; because the error thresholds have been exceeded the dataflow would have not proceeded. However they can be set independently allowing more elegant handling. 
 
 ```json
     "warning": {
