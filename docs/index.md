@@ -187,3 +187,12 @@ def auto_load_schema(table_mapping:TableMapping):
 
 result = auto_load_schema(table="customers")
 ```
+
+## Example Project
+
+[databricks-patterns](https://github.com/sibytes/databricks-patterns)
+
+This is an example project that loads file sources from landing. The files are semi structured and have header and footer information with table pf data in between the meets a specific schema.
+
+The data is loaded in the respective tables in raw, the headers and footer and shredded into a header and footer audit table. Finally all the audit information is brought to together and loaded into the audit table that can used to raise alerts or exceptions based on row counts and schema errors.
+
