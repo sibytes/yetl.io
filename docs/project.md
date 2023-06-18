@@ -1,8 +1,8 @@
 # Project
 
-Yetl has the concept of project. A project houses all the assets to configure your pipelines, the pipelines themselves and deploymemnt assets. They are deployable products that can be a data feed product or a individual component of a larger group data feed products.
+Yetl has the concept of project. A project houses all the assets to configure your pipelines, the pipelines themselves and deploymemnt assets. They are deployable products that can be a data feed or an individual component data feed product of something larger.
 
-Although it's entirely possible to reconfigure the structure a canonical structure is recommended since the API just works without any additional consideration for all of these environments:
+Although it's entirely possible to reconfigure the project structure a canonical structure is recommended since the API just works without any additional consideration for all of these environments:
 
 - Local
 - Databricks Workspace
@@ -10,7 +10,7 @@ Although it's entirely possible to reconfigure the structure a canonical structu
 
 ## Create a new project
 
-Yetl has a built in cli for common tasks. One of those common tasks is creating a new project.
+Yetl has a built-in cli for common tasks. One of those common tasks is creating a new project.
 
 Create a python virtual environment and install yetl:
 
@@ -38,9 +38,9 @@ This will create:
 ![yetl init project structure](./assets/yetl_init_project.png)
 
 
-- databricks - will store databricks that will be deployed to databricks.
-- pipelines - will yetl configuration for the data pipelines.
-- sql - if you choose to define some tables using SQL explicitly it will go here.
+- databricks - will store databricks workflows, notebooks, etc that will be deployed to databricks.
+- pipelines - will sore yetl configuration for the data pipelines.
+- sql - if you choose to define some tables using SQL explicitly and have yetl create those tables then the SQL files will go in here.
 - schema - will hold the spark schema's in yaml for the landing data files when we autogenerate the schema's
 
 ## Project config
