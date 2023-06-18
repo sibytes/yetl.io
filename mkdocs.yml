@@ -65,7 +65,7 @@ theme:
 
 
 nav:
-    - Summary: 
+    - Introduction: 
       - index.md
     - About: about.md
 site_name: YETL
