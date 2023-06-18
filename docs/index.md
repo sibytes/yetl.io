@@ -222,7 +222,7 @@ def autoloader(table_mapping:TableMapping):
 result = autoloader(table="customers")
 ```
 
-## Example Project
+## Example project
 
 [databricks-patterns](https://github.com/sibytes/databricks-patterns)
 

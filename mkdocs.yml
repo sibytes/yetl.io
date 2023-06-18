@@ -33,7 +33,7 @@ theme:
     # - navigation.instant
     # - navigation.prune
     - navigation.sections
-    - navigation.tabs
+    # - navigation.tabs
     # - navigation.tabs.sticky
     - navigation.top
     - navigation.tracking
@@ -65,7 +65,7 @@ theme:
 
 
 nav:
-    - Introduction: 
-      - index.md
+    - index.md
+    - Project: project.md
     - About: about.md
 site_name: YETL
