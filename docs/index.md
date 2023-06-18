@@ -2,30 +2,30 @@
 
 Expressive, agile, fun for Data Engineers using Python!
 
+Yetl is a configuration API for Databricks datalake house pipelines. It allows you to easily define the configuration and metadata of pipelines that can be accessed using a python to build modular pyspark pipelines with good software engineering practices.
+
 ```
 pip install yetl-framework
 ```
 
-## What is YETL?
+## What does it do?
 
-
-
-YETL is a data engineering configuration framework for building modern cloud datalake houses with [Apache Spark][apache_spark], [Databricks][databricks], [DeltaLake][delta_lake]; hence the name Yet (another) ETL Framework. In time could support many more DSL frameworks and table formats e.g. Pandas and Iceberg
 
 Using yetl a data engineer can define configuration to take data from a source dataset to a destination dataset and just code the transform in between. It takes care of the mundane allowing the engineer to focus only on the value end of data flow in a fun and expressive way.
 
-Summary:
+Feaures:
 
-- Uses a generic decorator pattern i.e. the framework can change, improve and extend but your existing pipelines will require NO changes
-- It defines data flows between source datasets and destination datasets
-- It takes care of the mundane best practice using configuration that's easy to maintain and build with no death by configuration!
-- No compromises on engineering practices allowing you to left shift the specifics of data flows in tight dev test loops.
-- It supports landing formats onboarded into a timesliced structured datalake
-- It supports Delta Lake tables
-- You can develop, test locally or remotely
-- It provides Timeslice native type to inject into loads to run incremental loads, partial bulk loads and full reloads
-- It provides easy to extend save write types that can be used from configuration or injected into loads
-- Can be used with any orchestrator or worklow tool
+- Define table metadata, properties and dependencies easily that can be used programmaticaly with pipelines
+- Define table metadata in Excel and covert to a configuration yaml file using the CLI
+- Optionally define tables in SQL
+- Optionally creates delta tables defined
+- Generate spark schemas and save them into your project automatically, provides access to schema's uing the API
+- Automatically provides DDL and SQL from spark schema's for schema hints
+- API provides a table collection index and table mappings API with property acceessors for each table
+- Supports jinja variables for expressive configuration idioms
+- Provides a timeslice object for parameterising pipelines with wildcard paths
+- Provides timeslice transform to parse the datetime from a path or filename into the dataset
+- Can be used to create checkpoints in a consistent was for your project for complex streaming patterns
 
 
 ## What is it really?
@@ -35,7 +35,7 @@ The best way to see what it is, is to look at a simple example.
 Define your tables:
 
 ```yaml
-version: 1.3.0
+version: 1.5.0
 
 audit_control:
   delta_lake:
@@ -60,7 +60,7 @@ raw:
   delta_lake:
     raw_dbx_patterns:
       customers:
-        ids: id
+        id: id
         depends_on:
           - landing.landing_dbx_patterns.customer_details_1
           - landing.landing_dbx_patterns.customer_details_2
@@ -76,12 +76,38 @@ raw:
           min_rows: 0
         custom_properties:
           process_group: 1
+        z_order_by:
+          - _load_date_1
+          - _load_date_2
+        vacuum: 30
+
+base:
+  delta_lake:
+    # delta table properties can be set at stage level or table level
+    delta_properties:
+      delta.appendOnly: true
+      delta.autoOptimize.autoCompact: true    
+      delta.autoOptimize.optimizeWrite: true  
+      delta.enableChangeDataFeed: false
+    base_dbx_patterns:
+      customer_details_1:
+        id: id
+        depends_on:
+          - raw.raw_dbx_patterns.customers
+        # delta table properties can be set at stage level or table level
+        # table level properties will overwride stage level properties
+        delta_properties:
+            delta.enableChangeDataFeed: true
+      customer_details_2:
+        id: id
+        depends_on:
+          - raw.raw_dbx_patterns.customers
 ```
 
 Define you load configuration:
 
 ```yaml
-version: 1.3.0
+version: 1.5.0
 tables: ./tables.yaml
 
 audit_control:
@@ -92,13 +118,11 @@ audit_control:
         delta.autoOptimize.autoCompact: true
         delta.autoOptimize.optimizeWrite: true
     managed: false
-    create_table: true
     container: datalake
     location: /mnt/{{container}}/data/raw
-    checkpoint_location: "/mnt/{{container}}/checkpoint/{{checkpoint}}"
     path: "{{database}}/{{table}}"
     options:
-      checkpointLocation: default
+      checkpointLocation: "/mnt/{{container}}/checkpoint/{{project}}/{{checkpoint}}"
 
 landing:
   read:
@@ -109,12 +133,17 @@ landing:
     filename: "{{table}}-{{filename_date_format}}*.csv"
     filename_date_format: "%Y%m%d"
     path_date_format: "%Y%m%d"
+    # injects the time period column into the dataset
+    # using either the path_date_format or the filename_date_format
+    # as you specify
+    slice_date: filename_date_format
+    slice_date_column_name: _slice_date
     format: cloudFiles
     spark_schema: ../schema/{{table.lower()}}.yaml
     options:
       # autoloader
       cloudFiles.format: csv
-      cloudFiles.schemaLocation:  /mnt/{{container}}/checkpoint/{{checkpoint}}
+      cloudFiles.schemaLocation:  /mnt/{{container}}/checkpoint/{{project}}/{{checkpoint}}
       cloudFiles.useIncrementalListing: auto
       # schema
       inferSchema: false
@@ -139,13 +168,12 @@ raw:
       delta.autoOptimize.optimizeWrite: true  
       delta.enableChangeDataFeed: false
     managed: false
-    create_table: true
     container: datalake
     location: /mnt/{{container}}/data/raw
     path: "{{database}}/{{table}}"
-    checkpoint_location: "/mnt/{{container}}/checkpoint/{{checkpoint}}"
     options:
       mergeSchema: true
+      checkpointLocation: "/mnt/{{container}}/checkpoint/{{project}}/{{checkpoint}}"
 
 base:
   delta_lake:
@@ -158,16 +186,22 @@ base:
 Import the config objects into you pipeline:
 
 ```python
-from yetl import Config, StageType
+from yetl import Config, Timeslice, StageType, Read, DeltaLake
 
-pipeline = "auto_load_schema"
+pipeline = "autoloader"
+config_path = "./test/config"
 project = "test_project"
+timeslice = Timeslice(day="*", month="*", year="*")
 config = Config(
-    project=project, pipeline=pipeline
+    project=project, pipeline=pipeline, config_path=config_path, timeslice=timeslice
 )
 table_mapping = config.get_table_mapping(
     stage=StageType.raw, table="customers"
 )
+
+source: Read = table_mapping.source["customer_details_1"]
+destination: DeltaLake = table_mapping.destination
+config.set_checkpoint(source=source, destination=destination)
 
 print(table_mapping)
 ```
@@ -175,24 +209,27 @@ print(table_mapping)
 Use even less code and use the decorator pattern:
 
 ```python
+
 @yetl_flow(
         project="test_project", 
-        stage=StageType.raw
+        stage=StageType.raw, 
+        config_path="./test/config"
 )
-def auto_load_schema(table_mapping:TableMapping):
-
+def autoloader(table_mapping:TableMapping):
     # << ADD YOUR PIPELINE LOGIC HERE - USING TABLE MAPPING CONFIG >>
     return table_mapping # return whatever you want here.
 
-
-result = auto_load_schema(table="customers")
+result = autoloader(table="customers")
 ```
 
 ## Example Project
 
 [databricks-patterns](https://github.com/sibytes/databricks-patterns)
 
-This is an example project that loads file sources from landing. The files are semi structured and have header and footer information with table pf data in between the meets a specific schema.
+This example projects has 4 projects loading data landed from:
 
-The data is loaded in the respective tables in raw, the headers and footer and shredded into a header and footer audit table. Finally all the audit information is brought to together and loaded into the audit table that can used to raise alerts or exceptions based on row counts and schema errors.
+- adventure works
+- adventure works lt
+- adventure works dw
+- header_footer - a small demo of files with semic structured headers and footers that stripped into an audit table on the when loaded.
 
