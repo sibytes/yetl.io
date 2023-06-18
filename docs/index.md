@@ -28,6 +28,17 @@ Feaures:
 - Can be used to create checkpoints in a consistent was for your project for complex streaming patterns
 
 
+Once you have re-usable modular pipeline code and configuration... you can get really creative:
+
+- Parameterise whether you want to run your pipelines as batch or streaming
+- Bulk load a migration and then switch to batch streaming autoloader for incrementals
+- Generate databricks worflows
+- Generate databricks DLT pipelines
+- Parameterise bulk reload or incremental pipelines
+- Test driven development
+- Integrate with data expectations framework
+
+
 ## What is it really?
 
 The best way to see what it is, is to look at a simple example.
