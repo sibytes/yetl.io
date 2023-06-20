@@ -72,3 +72,28 @@ The version attribute is also important this makes sure that you're using the ri
 ## Logging config
 
 The `logging.yaml` is the python logging configuration. Configure yetl logging as you please by altering this file.
+
+## SQL
+
+Sometimes there are requirements to explicitly create tables using SQL DDL statements. 
+
+For example if you're loading a fan in pattern where multiple source tables are loading into the same destination table in parallel you cannot create the schema from the datafeed on the fly, either with or without the merge schema option. This is because delta tables are optimistically isolated and attempting the change the schema in multiple process will mostly likely cause a [conflict](https://docs.delta.io/latest/concurrency-control.html#metadatachangedexception). This is common pattern for audit tracking tables when loading bronze and silver tables (raw and base stages respectively)
+
+You may also just find it more practical to manage table creation by explicitly declaring create table SQL statements. There is a feature in the road map to automatically snyc the table schema when changes are made, although that currently is not implemented.
+
+In order to explicitly define tables using SQL:
+
+1. Create a folder in the `sql` directory that is the database name e.g. `my_database`
+2. Create a .sql file in the folder called the name of the table e.g. `my_table.sql`
+3. Put a deltalake compatible create SQL statement in the sql file
+
+e.g.
+
+```
+./sql/my_database/my_table.sql
+```
+
+For [example](https://github.com/sibytes/databricks-patterns/blob/main/header_footer/sql/yetl_control_header_footer/raw_audit.sql), in this project we use this feature to create an audit tracking table for loading a ronze (raw) tables called `yetl_control_header_footer.raw_audit.sql`. Note that if we want to declare the table unmananged and provide an explicitly location we can do using the jinja variables `{{delta_properties}}` and `{{location}}` which is defined in the pipeline configuration.
+
+## Pipeline
+
