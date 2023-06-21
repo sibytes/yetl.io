@@ -111,15 +111,18 @@ A lot of thought has gone into this design to make configuration creation and ma
 
 This configuration file contains the information of **WHAT** the database tables and files are that we want to load. What we mean by that, is that it's at the grain of the table and therefore each table can be configured differently if required. For example each table has it's own name. It doesn't contain any configuration of how the table is loaded.
 
-One table definition file is allowed per project. Each file can hold definitions for any number of tables for databases at the following data stages:
+One table definition file is allowed per project. Each file can hold definitions for any number of tables for databases at the following data stages. Database table type can be Read (spark read api for various formats) or DeltaLake:
 
+- audit_control
 - landing
 - raw (bronze)
 - base (silver)
 - curated (gold)
 - extract
 
-It is therefore oppinionated about the basic levels that should be implemented in a data warehouse in terms of stages. But that is that it's rigidity starts and ends. You can put what ever tables you want in any layer, in any datbase with dependencies entirely of your own choosing.
+Typically Read table types would be used in landing and DeltaLake tables for everything else.
+
+It is therefore oppinionated about the basic levels that should be implemented in a data warehouse in terms of stages and follows the medallion lakehouse arhitecture. It's rigidity starts and ends there however; you can put what ever tables you want in any layer, in any datbase with dependencies entirely of your own choosing.
 
 [tables.yaml example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.yaml)
 
