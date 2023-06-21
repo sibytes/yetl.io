@@ -104,13 +104,13 @@ The pipline folder holds yaml files that describe the databases, tables, files a
 
 A lot of thought has gone into this design to make configuration creation and management as developer friendly and minimal as possible. There are 2 core types of files:
 
-1. tables.yaml - The What!
+### tables.yaml - The What!
 
 This configuration file contains the information of **WHAT** database tables and files that we want to load. What we mean by that, is that it's at the grain of the table and therefore each table can be configured differently if required. For example each table has it's own name. One table definition file is allowed per project. It doesn't contain any configuration of how the table is loaded.
 
 By far the biggest hurdle is defining the table configuration. To rememedy this the yetl CLI tool has command to convert an Excel document into the required yaml format. Curating this information in Excel is far more user friendly than a yaml document for large numbers of tables. See the pipeline documentation for full details.
 
-2. my_pipeline.yaml - The How!
+### my_pipeline.yaml - The How!
 
 This configuration file contains pipeline configuration properties that describes **HOW** the tables are loaded. For a given feed that is landed and loaded to silver (base) tables a lot of these are the same for every table in the feed. There can be more than one of these files for a given project. In other words you can define more than one way to load your tables and parameterise the pattern in the pipeline.
 
@@ -119,18 +119,23 @@ An example use case of this might be to batch load a large migration dataset; th
 So what does yetl do that provides value, since all we have is a bunch of configuration files:
 
 1. Configuration Stitching
+2. Jinja Rendering
+3. Validation
+4. API
+
+### Configuration Stitching
 
 It stitches the table and pipeline data together using a minimal python idioms and provides easy access to the table collections and pipeline properties. Some properties fall on a gray line in the sense that sometimes they are the same for all tables but on specific occaisions you might want them to be different. For e.g.. deltalake properties. You can define them in the pipeline doc but override them if you want on specific tables.
 
-2. Jinja Rendering
+### Jinja Rendering
 
 There are some jinja templating and features built into the configuration deserialization. This can avoid repetition allowing for easier maintenance; or provide enhanced functions around injecting time slice parameters of a specific format into file paths. See the pipeline documentation for specific details.
 
-3. Validation
+### Validation
 
 When yetl uses pydantic to validate and desrialize the configuration data making it robust, easy to use and easy to extend and support.
 
-4. API
+### API
 
 The yetl API exposes the validated, stitched and rendered configuration into an easy to use API that can used to implement modular pipelines exactly how you want to. **Yetl does not take over specifically you you as an engineer want to build and test your pipelines**.
 
