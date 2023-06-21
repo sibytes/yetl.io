@@ -118,7 +118,6 @@ One table definition file is allowed per project. Each file can hold definitions
 - raw (bronze)
 - base (silver)
 - curated (gold)
-- extract
 
 Typically Read table types would be used in landing and DeltaLake tables for everything else.
 
