@@ -104,9 +104,22 @@ The pipline folder holds yaml files that describe the databases, tables, files a
 
 A lot of thought has gone into this design to make configuration creation and management as developer friendly and minimal as possible. There are 2 core types of files:
 
+1. Tables & files - tables.yaml contains **WHAT** we are loading
+2. Pipeline - {pipeline_pattern_name}.yaml contains **HOW** we are loading it
+
 ### Tables & Files - The What!
 
-This configuration file contains the information of **WHAT** database tables and files that we want to load. What we mean by that, is that it's at the grain of the table and therefore each table can be configured differently if required. For example each table has it's own name. One table definition file is allowed per project. It doesn't contain any configuration of how the table is loaded.
+This configuration file contains the information of **WHAT** the database tables and files are that we want to load. What we mean by that, is that it's at the grain of the table and therefore each table can be configured differently if required. For example each table has it's own name. It doesn't contain any configuration of how the table is loaded.
+
+One table definition file is allowed per project. Each file can hold definitions for any number of tables for databases at the following data stages:
+
+- landing
+- raw (bronze)
+- base (silver)
+- curated (gold)
+- extract
+
+It is therefore oppinionated about the basic levels that should be implemented in a data warehouse in terms of stages. But that is that it's rigidity starts and ends. You can put what ever tables you want in any layer, in any datbase with dependencies entirely of your own choosing.
 
 [tables.yaml example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.yaml)
 
