@@ -104,17 +104,24 @@ The pipline folder holds yaml files that describe the databases, tables, files a
 
 A lot of thought has gone into this design to make configuration creation and management as developer friendly and minimal as possible. There are 2 core types of files:
 
-### tables.yaml - The What!
+### Tables & Files - The What!
 
 This configuration file contains the information of **WHAT** database tables and files that we want to load. What we mean by that, is that it's at the grain of the table and therefore each table can be configured differently if required. For example each table has it's own name. One table definition file is allowed per project. It doesn't contain any configuration of how the table is loaded.
 
+[tables.yaml example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.yaml)
+
 By far the biggest hurdle is defining the table configuration. To rememedy this the yetl CLI tool has command to convert an Excel document into the required yaml format. Curating this information in Excel is far more user friendly than a yaml document for large numbers of tables. See the pipeline documentation for full details.
 
-### my_pipeline.yaml - The How!
+[tables.xlsx example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.xlsx)
+
+
+### Pipeline - The How!
 
 This configuration file contains pipeline configuration properties that describes **HOW** the tables are loaded. For a given feed that is landed and loaded to silver (base) tables a lot of these are the same for every table in the feed. There can be more than one of these files for a given project. In other words you can define more than one way to load your tables and parameterise the pattern in the pipeline.
 
 An example use case of this might be to batch load a large migration dataset; then turn on autoloader and event load incrementals from that position onwards.
+
+[batch.yaml pipeline example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/batch.yaml)
 
 So what does yetl do that provides value, since all we have is a bunch of configuration files:
 
