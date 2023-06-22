@@ -67,5 +67,6 @@ theme:
 nav:
     - index.md
     - Project: project.md
+    - On-Board Datafeed: on-board-datafeed.md
     - About: about.md
 site_name: YETL
