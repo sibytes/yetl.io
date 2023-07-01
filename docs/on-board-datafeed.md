@@ -42,33 +42,37 @@ python -m yetl init my_project
 Fill out the spreadsheet template with landing and deltalake architecture that you want to load.
 The excel file has to be in a specific format other the import will not work. Use this [example](https://github.com/sibytes/databricks-patterns/blob/main/header_footer/pipelines/tables.xlsx) as a template
 
+NOTE:
+- Lists are entered using character return between items in an Excel cell.
+- Dicts are entered using a : between key value pairs and character returns betweenitmes in an Excel cell.
 
-|merge_column.column                  | required | default | type | description |
+|merge_column.column                  | required | type | description |
 |-|-|-|-|-|
-| stage	                              |          |         |      |                                                                                      |
-| table_type	                      |          |         |      |                                                                                      |   
-| database	                          |          |         |      |                                                                                      |       
-| table	                              |          |         |      |                                                                                      |       
-| sql	                              |          |         |      |                                                                                      |   
-| id	                              |          |         |      |                                                                                      |   
-| depends_on	                      |          |         |      |                                                                                      |   
-| deltalake.delta_properties          |          |         |      |                                                                                      |       
-| deltalake.identity                  |          |         |      |                                                                                      |
-| deltalake.partition_by              |          |         |      |                                                                                      |   
-| deltalake.delta_constraints         |          |         |      |                                                                                      |   
-| deltalake.z_order_by                |          |         |      |                                                                                      |
-| deltalake.vacuum                    |          |         |      |                                                                                      |
-| warning_thresholds.invalid_ratio    |          |         |      |                                                                                      |
-| warning_thresholds.invalid_rows     |          |         |      |                                                                                      |
-| warning_thresholds.max_rows         |          |         |      |                                                                                      |
-| warning_thresholds.mins_rows        |          |         |      |                                                                                      |
-| error_thresholds.invalid_ratio      |          |         |      |                                                                                      |
-| error_thresholds.invalid_rows       |          |         |      |                                                                                      |
-| error_thresholds.max_rows           |          |         |      |                                                                                      |
-| error_thresholds.mins_rows          |          |         |      |                                                                                      |
-| custom_properties.process_group     |          |         |      |                                                                                      |
-| custom_properties.rentention_days   |          |         |      |                                                                                      |
-| custom_properties.anything_you_want |          |         |      |                                                                                      |
+| stage	                              |     y     | [audit_control, landing, raw, base, curated] | The architecural layer of the data lake house you want the DB in |
+| table_type	                      |     y     | [read, delta_lake] | What type of table to create, read is a spark.read, delta_lake is a delta table. | 
+| catalog	                          |     n     | str | name of the catalog. Although you can set it here in the condif the api allows passing it as a parameter also. |   
+| database	                          |     y     | str | name of the database |       
+| table	                              |     y     | str | name of the table |       
+| sql	                              |     n     | [y, n] | whether or not to include a default link to a SQL ddl file for creating the table. |   
+| id	                              |     n     | str, List[str] | a column name or list of column names that is the primary key of the table. |   
+| depends_on	                      |     n     | List[str] | list of other tables that the table is loaded from thus creating a mapping. It required the yetl index which is `stage.database.table` you can also use  `stage.database.*` for exmaple if you want to reference all the tables in a database.|   
+| deltalake.delta_properties          |     n     | Dict[str,str] | key value pairs of databricks delta properties |       
+| deltalake.identity                  |     n     | [y, n] | whether or not to include an indentity on the table when a delta table is created implicitly |
+| deltalake.partition_by              |     n     | str, List[str] | column or list of columns to partition the table by |   
+| deltalake.delta_constraints         |     n     | Dict[str,str] | key value pairs of delta table constraints |   
+| deltalake.z_order_by                |     n     | str, List[str] | column or list of columns to z-order the table by |   
+| deltalake.vacuum                    |     n     | int | vaccum threshold in days for a delta table |
+| warning_thresholds.invalid_ratio    |     n     | float | ratio of invalid to valid rows threshold that can be used to raise a warning |
+| warning_thresholds.invalid_rows     |     n     | int | number of invalid rows threshold that can be used to raise a warning |
+| warning_thresholds.max_rows         |     n     | int | max number of rows thresholds that can be used to raise a warning |
+| warning_thresholds.mins_rows        |     n     | int | min number of rows thresholds that can be used to raise a warning |
+| error_thresholds.invalid_ratio      |     n     | float | ratio of invalid to valid rows threshold that can be used to raise an exception |
+| error_thresholds.invalid_rows       |     n     | int | number of invalid rows threshold that can be used to raise an exception |
+| error_thresholds.max_rows           |     n     | int | max number of rows thresholds that can be used to raise an exception |
+| error_thresholds.mins_rows          |     n     | int | min number of rows thresholds that can be used to raise an exception |
+| custom_properties.process_group     |     n     | any | customer properties can be what ever you want. Yetl is smart enough to build them into the API |
+| custom_properties.rentention_days   |     n     | any | |
+| custom_properties.anything_you_want |     n     | any | |
 
 
 Create the tables.yaml file by executing:
