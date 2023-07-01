@@ -43,11 +43,13 @@ Fill out the spreadsheet template with landing and deltalake architecture that y
 The excel file has to be in a specific format other the import will not work. Use this [example](https://github.com/sibytes/databricks-patterns/blob/main/header_footer/pipelines/tables.xlsx) as a template
 
 NOTE:
+
 - Lists are entered using character return between items in an Excel cell.
 - Dicts are entered using a : between key value pairs and character returns betweenitmes in an Excel cell.
 
+
 |merge_column.column                  | required | type | description |
-|-|-|-|-|-|
+|-|-|-|-|
 | stage	                              |     y     | [audit_control, landing, raw, base, curated] | The architecural layer of the data lake house you want the DB in |
 | table_type	                      |     y     | [read, delta_lake] | What type of table to create, read is a spark.read, delta_lake is a delta table. | 
 | catalog	                          |     n     | str | name of the catalog. Although you can set it here in the condif the api allows passing it as a parameter also. |   
@@ -82,6 +84,10 @@ python -m yetl import-tables ./my_project/pipelines/tables.xlsx ./my_project/pip
 ```
 
 ## Create Pipeline Metadata
+
+In the `./my_project/pipelines` folder create a yaml file that contains the metadata specifying how to load the tables defined in `./my_project/pipelines/tables.yaml`. You can call them whatever you want and you can create more than one. Perhaps one that batch loads and another that event stream loads. The yetl api will allow you to parameterise which pipeline metadata you want to use.
+
+Please see the pipeline reference documentation for details. Here is an [example](https://github.com/sibytes/databricks-patterns/blob/main/header_footer/pipelines/autoloader.yaml).
 
 ## Create Spark Schema
 
