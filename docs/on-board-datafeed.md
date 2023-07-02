@@ -85,11 +85,85 @@ python -m yetl import-tables ./my_project/pipelines/tables.xlsx ./my_project/pip
 
 ## Create Pipeline Metadata
 
-In the `./my_project/pipelines` folder create a yaml file that contains the metadata specifying how to load the tables defined in `./my_project/pipelines/tables.yaml`. You can call them whatever you want and you can create more than one. Perhaps one that batch loads and another that event stream loads. The yetl api will allow you to parameterise which pipeline metadata you want to use.
+In the `./my_project/pipelines` folder create a yaml file that contains the metadata specifying how to load the tables defined in `./my_project/pipelines/tables.yaml`. You can call them whatever you want and you can create more than one. Perhaps one that batch loads and another that event stream loads. The yetl api will allow you to parameterise which pipeline metadata you want to use. For the purpose of these docs we will refere to this pipeline as `my_pipeline.yaml`.
+
+The pipeline file `my_pipeline.yaml` has a relative file reference to `tables.yaml` and the therefore yetl knows what files to use to stitch the table metadata together.
 
 Please see the pipeline reference documentation for details. Here is an [example](https://github.com/sibytes/databricks-patterns/blob/main/header_footer/pipelines/autoloader.yaml).
 
 ## Create Spark Schema
+
+Once the yetl metadata is in place we can start using the API. The 1st task is to create the landing schema that need to load the data. This can be done using a simple notebook on databricks.
+
+Using databricks repo's you can clone your project into databricks.
+
+This must be in it's own cell:
+```sh
+%pip install yetl-framework==1.6.4
+```
+
+Executing the following code will load the files and save the spark schema into the `./my_project/schema' directory in yaml format making it easy to review and adjust if you wish. There's no reason to move the files anywhere else once created, yetl uses this location as a schema repo. The files will named after the tables making it intuitive to understand what the schema's are and how the map.
+
+The [ad works example project](https://github.com/sibytes/databricks-patterns/tree/main/ad_works) shows this [notebook](https://github.com/sibytes/databricks-patterns/blob/main/ad_works/databricks/notebooks/bronze/create_schema.py) approach working very well creating the [schema](https://github.com/sibytes/databricks-patterns/tree/main/ad_works/schema) over a relatively large number of [tables](https://github.com/sibytes/databricks-patterns/blob/main/ad_works/pipelines/tables.yaml).
+
+```python
+
+from yetl import (
+  Config, Read, DeltaLake, Timeslice
+)
+import yaml, os
+
+def create_schema(
+  source:Read, 
+  destination:DeltaLake
+):
+
+  options = source.options
+  options["inferSchema"] = True
+  options["enforceSchema"] = False
+
+  df = (
+    spark.read
+    .format(source.format)
+    .options(**options)
+    .load(source.path)
+  )
+
+  schema = yaml.safe_load(df.schema.json())
+  schema = yaml.safe_dump(schema, indent=4)
+
+  with open(source.spark_schema, "w", encoding="utf-8") as f:
+    f.write(schema)
+
+project = "my_project"
+pipeline = "my_pipeline"
+
+# Timeslice may be required depending how you've configured you landing area.
+# here we just using a single period to define the schema 
+# Timeslice(year="*", month="*", day="*") would use all the data 
+# you have which could be very inefficient.
+
+# This exmaple uses the data in the landing partition of 2023-01-01
+# how that is mapped to file and directories the my_pipeline definition
+config = Config(
+  project=project, 
+  pipeline=pipeline,
+  timeslice=Timeslice(year=2023, month=1, day=1)
+)
+
+tables = config.tables.lookup_table(
+  stage=StageType.raw, 
+  first_match=False
+)
+
+for t in tables:
+  table_mapping = config.get_table_mapping(
+    t.stage, t.table, t.database, create_table=False
+  )
+  create_schema(table_mapping.source, table_mapping.destination)
+```
+
+As you can see using this approach can also be used for creating tables in a pipeline step prior to any load pipeline using the `create_table` parameter. It will either create explicity defined tables using SQL DML if you've configured any or just create register empty delta tables with no schema. This may be required if you have multiple sources flowing into a single table (fan-in) to avoid transaction isolation errors creating the tables the 1st time that the pipeline runs.
 
 ## Develop & Test Pipeline
 
