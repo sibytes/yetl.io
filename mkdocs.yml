@@ -68,5 +68,8 @@ nav:
     - index.md
     - Project: project.md
     - On-Board Datafeed: on-board-datafeed.md
+    - Reference:
+      - Table Config: reference/table-config.md
     - About: about.md
+
 site_name: YETL
