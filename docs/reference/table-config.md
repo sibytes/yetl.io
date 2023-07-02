@@ -8,22 +8,22 @@ The table metadata is the most difficult and time consuming metadata to curate. 
 
 A solution lands 3 files:
 
-- customer_details_1
-- customer_details_2
-- customer_preferences
+- `customer_details_1`
+- `customer_details_2`
+- `customer_preferences`
 
 The files are loaded into raw from landing with a deltalake table for each file.
 
-Those tables are then loaded into base tables. customer_details_1 and customer_details_2 are unioned together and loaded into a customer table. So the base tables are:
+Those tables are then loaded into base tables. `customer_details_1` and `customer_details_2` are unioned together and loaded into a customer table. So the base tables are:
 
-- customers
-- customer_perferences
+- `customers`
+- `customer_perferences`
 
 Each file has a header and footer with some audit data we load this with some other etl audit data into deltalake audit tables:
 
-- header_footer
-- raw_audit
-- base_audit
+- `header_footer`
+- `raw_audit`
+- `base_audit`
 
 Here is the `tables.yaml` metadata that describes the stages, databases and tables:
 
@@ -196,6 +196,12 @@ version: string
 
 Version is the version number of yetl that the metadata is compatible with. If the major and minor version are not the same as the yetl python libary that you're using to load the metadata then an error will be raised. This is to ensure the metadata is compatible with the version of yetl that you're using.
 
+Example:
+
+```yaml
+version: 1.6.4
+```
+
 ### Stage
 
 The stage of the datalake house architecture. Yetl supports the following `stage`s:
@@ -224,15 +230,16 @@ raw:
 
 ### delta_properties
 
-Deltalake properties is an object of key-value pairs that describes the deltalake properties. They can be defined at the table type level or the table level. The lowest level of granularity takes precence over the higher levels. So you can define properties at a high level but override them at the table level if individual table or tables has specific properties that need to be defined. 
+Deltalake properties is an object of key-value pairs that describes the deltalake properties. They can be defined at the table type level or the table level. The lowest level of granularity takes precedence over the higher levels. So you can define properties at a high level but override them at the table level if a table has specific properties that need to be defined. 
 
 Example:
 
 ```yaml
-delta.appendOnly: true
-delta.autoOptimize.autoCompact: true    
-delta.autoOptimize.optimizeWrite: true  
-delta.enableChangeDataFeed: false
+delta_properties:
+  delta.appendOnly: true
+  delta.autoOptimize.autoCompact: true    
+  delta.autoOptimize.optimizeWrite: true  
+  delta.enableChangeDataFeed: false
 ```
 
 ### TableType
