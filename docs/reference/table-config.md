@@ -261,7 +261,7 @@ raw:
 
 ### index
 
-Index is a string formatted specifically to describe a table index. In the Yetl api the tables are index and the index can be used to quickyl find and define dependencies.
+Index is a string formatted specifically to describe a table index. In the Yetl api the tables are index and the index can be used to quickly find and define dependencies.
 
 The index takes the following form:
 
