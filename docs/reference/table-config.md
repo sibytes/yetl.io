@@ -281,6 +281,7 @@ audit_control:
   delta_lake:
     yetl_control_header_footer:
       base_audit:
+        # this table depends on all the tables in the raw database called yetl_raw_header_footer
         depends_on:
         - raw.yetl_raw_header_footer.*
 ```
