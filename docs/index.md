@@ -243,5 +243,5 @@ This example projects has 4 projects loading data landed from:
 - adventure works lt
 - adventure works dw
 - header_footer - a small demo of files with semic structured headers and footers that stripped into an audit table on the when loaded.
-- header_footer - same as header footer but using databricks Unity Catalog.
+- header_footer_uc - same as header footer but using databricks Unity Catalog.
 
