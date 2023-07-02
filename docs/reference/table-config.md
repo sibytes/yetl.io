@@ -2,7 +2,9 @@
 
 The table configuration defines that is loaded in a data pipeline.
 
-# Example
+The table metadata is the most difficult and time consuming metadata to curate. Therefore yetl provides a command line tool to convert an excel curated definition of metadata into the required yaml format. Curating this kind of detail for large numbers of tables is much easier to do in an Excel document do it's excellent features.
+
+## Example
 
 A solution lands 3 files:
 
@@ -184,12 +186,13 @@ version: string
                     min_rows: int
                 custom_properties: object
                 z_order_by: str|list[str]
+                partition_by: str|list[str]
                 vacuum: int
                 sql: path
 
 ```
 
-## Stage
+### Stage
 
 The stage of the datalake house architecture. Yetl supports the following `stage`s:
 
@@ -215,7 +218,7 @@ raw:
   delta_lake:
 ```
 
-## delta_properties
+### delta_properties
 
 Deltalake properties is an object of key-value pairs that describes the deltalake properties. They can be defined at the table type level or the table level. The lowest level of granularity takes precence over the higher levels. So you can define properties at a high level but override them at the table level if individual table or tables has specific properties that need to be defined. 
 
@@ -228,7 +231,7 @@ delta.autoOptimize.optimizeWrite: true
 delta.enableChangeDataFeed: false
 ```
 
-## TableType
+### TableType
 
 Table type is the type of table that is used. Yetl supports the following `table_type`s:
 
@@ -249,7 +252,7 @@ raw:
   delta_lake:
 ```
 
-## index
+### index
 
 Index is a string formatted specifically to describe a table index. In the Yetl api the tables are index and the index can be used to quickyl find and define dependencies.
 
@@ -275,7 +278,20 @@ audit_control:
         - raw.yetl_raw_header_footer.*
 ```
 
-## sql
+### id
+
+`id` is a string or list of strings that is the columns name or names of the table uniqie identifier.
+
+### z_order_by
+
+`z_order_by` is a string or list of strings that is the columns name or names to z_order the table by.
+
+### partition_by
+
+`partition_by` is a string or list of strings that is the columns name or names to partition the table by.
+
+
+### sql
 
 `sql` is relative path to the directory that holds a file container the explicit SQL to create the table. Note that jinja varaiable can be used for database and table thus defining that the sql directory is structured by database and table.
 
@@ -285,7 +301,7 @@ Example:
 sql: ../sql/{{database}}/{{table}}.sql
 ```
 
-## thresholds
+### thresholds
 
 Thresholds allow to define ETL audit metrics for each table. There are 2 properties for this:
 
@@ -320,4 +336,8 @@ exception_thresholds:
     # if there's less than 1 record raise an exception
     min_rows: 1
 ```
+
+### vacuum
+
+`vacuum` is the day threshold over which to apply the vacuum statement.
 
