@@ -208,11 +208,8 @@ The stage of the datalake house architecture. Yetl supports the following `stage
 
 - `audit-control` - define tables for holding etl data and audit logs
 - `landing` - define landing object store where files are copied into you your cloud storage before they uploaded into the delta lakehouse
-
 - `raw` - define databases and tables for the bronze layer of the datalake. These will typically be deltalake tables loading with landing data with nothing more than schema validation applied
-
 - `base` - define databases and deltalake tables for the silver layer of the datalake. These tables will hold data loaded from raw with data quality and cleansing applied.
-
 - `curated` - define databases and deltalake tables for the gold layer of the datalake. These tables will hold the results of heavy transforms that integrate and aggregate data using complex business transformations specifically for business requirements.
 
 Example:
