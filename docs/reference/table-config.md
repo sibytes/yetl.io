@@ -192,6 +192,10 @@ version: string
 
 ```
 
+### version
+
+Version is the version number of yetl that the metadata is compatible with. If the major and minor version are not the same as the yetl python libary that you're using to load the metadata then an error will be raised. This is to ensure the metadata is compatible with the version of yetl that you're using.
+
 ### Stage
 
 The stage of the datalake house architecture. Yetl supports the following `stage`s:
@@ -340,4 +344,19 @@ exception_thresholds:
 ### vacuum
 
 `vacuum` is the day threshold over which to apply the vacuum statement.
+
+### custom_properties
+
+`custom_properties` is object of key value pairs for anything that you want to define that's not in the specification. This feature allows yetl to be very flexible for any additional requirement that you may have.
+
+Example:
+
+```yaml
+custom_properties:
+    # define an affinity group to process tables on the same job clusters
+    process_group: 1
+    # define the days to retain the data for after which it is archived or deleted
+    rentention_days: 365
+```
+
 
