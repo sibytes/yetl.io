@@ -244,7 +244,6 @@ delta_properties:
 Table type is the type of table that is used. Yetl supports the following `table_type`s:
 
 - `read` - These are tables that are read using the spark read data api. Typically these are files with various formats. These types of tables are typically defined on the `landing` stage of the datalake.
-
 - `delta_lake` - These are deltalake tables that written to and read from during a pipeline load.
 
 Example:
