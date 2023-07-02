@@ -62,7 +62,7 @@ spark:
     logging_level: ERROR
 spark_schema: ./schema
 sql: ./sql
-version: 1.5.0.post1
+version: 1.6.4
 ```
 
 It also holds a spark configuration, this is what yetl uses to create the spark session if you choose to run yetl code locally. This can be usefull for local development and testing in deveops pipelines. Since we are just leveraging pyspark and delta lake it's very easy to install a local spark environment however you will need java installed if you want to work this way.
@@ -159,7 +159,7 @@ When yetl uses pydantic to validate and desrialize the configuration data making
 
 ### API
 
-The yetl API exposes the validated, stitched and rendered configuration into an easy to use API that can used to implement modular pipelines exactly how you want to. **Yetl does not take over specifically you you as an engineer want to build and test your pipelines**.
+The yetl API exposes the validated, stitched and rendered configuration into an easy to use API that can used to implement modular pipelines exactly how you want to. **Yetl does not take over specifically the way engineers want to build and test their pipelines**.
 
 It does however provide an easy to use API to iterate and access the metadata you need. The tables are indexed and can easily be retrieved or iterated. So you can build your custom pyspark pipelines or even just ignore some of the managed table properties and iterate the tables to create DLT pipelines in databricks.
 
