@@ -28,7 +28,7 @@ Each file has a header and footer with some audit data we load this with some ot
 Here is the `tables.yaml` metadata that describes the stages, databases and tables:
 
 ```yaml
-version: 1.6.4
+version: 1.6.5
 
 audit_control:
   delta_lake:
@@ -199,7 +199,7 @@ Version is the version number of yetl that the metadata is compatible with. If t
 Example:
 
 ```yaml
-version: 1.6.4
+version: 1.6.5
 ```
 
 ### Stage

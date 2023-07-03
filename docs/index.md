@@ -46,7 +46,7 @@ The best way to see what it is, is to look at a simple example.
 Define your tables:
 
 ```yaml
-version: 1.6.4
+version: 1.6.5
 
 audit_control:
   delta_lake:
@@ -118,7 +118,7 @@ base:
 Define you load configuration:
 
 ```yaml
-version: 1.6.4
+version: 1.6.5
 tables: ./tables.yaml
 
 audit_control:
