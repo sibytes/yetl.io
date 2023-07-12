@@ -163,17 +163,28 @@ base:
 This reference describes the required format of the `tables.yaml` configuration.
 
 ```yaml
-version: string
+version: major.minor.patch
 
-[stage:Stage]:
-    [table_type:TableType]:
-        delta_properties: object
-        [database_name:str]:
-            catalog: string
-            [table_name:str]:
-                id: string|list[string]
-                depends_on: index|list[index]
-                delta_properties: object
+<stage:Stage>:
+    <table_type:TableType>:
+        delta_properties:
+          <property_name>: str
+        <database_name:string>:
+            catalog: str|null
+            <table_name:str>:
+                id: str|list[str]|null
+                depends_on: index|list[index]|null
+                delta_properties:
+                  <property_name>: str
+                delta_constraints:
+                  <constraint_name>: str
+                custom_properties:
+                  <property_names>: str
+                z_order_by: str|list[str]|null
+                partition_by: str|list[str]|null
+                cluster_by: str|list[str]|null
+                vacuum: int|null
+                sql: path|null
                 warning_thresholds:
                     invalid_ratio: float
                     invalid_rows: int
@@ -184,13 +195,16 @@ version: string
                     invalid_rows: int
                     max_rows: int
                     min_rows: int
-                custom_properties: object
-                z_order_by: str|list[str]
-                partition_by: str|list[str]
-                vacuum: int
-                sql: path
+
+            <table_name:str>:
+              # table details
+              ...
+            <table_name:str>:
+              # table details
+              ...
 
 ```
+
 
 ### version
 
@@ -211,6 +225,18 @@ The stage of the datalake house architecture. Yetl supports the following `stage
 - `raw` - define databases and tables for the bronze layer of the datalake. These will typically be deltalake tables loading with landing data with nothing more than schema validation applied
 - `base` - define databases and deltalake tables for the silver layer of the datalake. These tables will hold data loaded from raw with data quality and cleansing applied.
 - `curated` - define databases and deltalake tables for the gold layer of the datalake. These tables will hold the results of heavy transforms that integrate and aggregate data using complex business transformations specifically for business requirements.
+
+
+At least 2 stages must defined:
+
+- `landing`
+- `raw`
+
+These stages are optional:
+
+- `audit_control`
+- `base`
+- `curated`
 
 Example:
 
@@ -237,6 +263,19 @@ delta_properties:
   delta.autoOptimize.autoCompact: true    
   delta.autoOptimize.optimizeWrite: true  
   delta.enableChangeDataFeed: false
+```
+
+### delta_constraints
+
+Deltalake properties is an object of key-value pairs that describes the deltalake constraints. The key is the constraint name and the value is the
+sql constraint.
+
+The constraints are added when yetl creates the tables.
+
+```yaml
+delta_properties:
+  dateWithinRange: "(birthDate > '1900-01-01')"
+  validIds: "(id > 1 and id < 99999999)"
 ```
 
 ### TableType
