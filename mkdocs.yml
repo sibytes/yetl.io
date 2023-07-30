@@ -69,7 +69,9 @@ nav:
     - Project: project.md
     - On-Board Datafeed: on-board-datafeed.md
     - Reference:
+      - Project Config: reference/project-config.md
       - Table Config: reference/table-config.md
+      - Pipeline Config: reference/pipeline-config.md
       - Python API: reference/python-api.md
     - About: about.md
 
