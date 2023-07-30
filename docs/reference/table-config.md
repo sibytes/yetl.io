@@ -28,7 +28,10 @@ Each file has a header and footer with some audit data we load this with some ot
 Here is the `tables.yaml` metadata that describes the stages, databases and tables:
 
 ```yaml
-version: 1.6.5
+
+# yaml-language-server: $schema=./json_schema/sibytes_yetl_tables_schema.json
+
+version: 2.1.0
 
 audit_control:
   delta_lake:
@@ -160,6 +163,12 @@ base:
 
 ## Specification
 
+If you use the `yetl` cli to create a project using `python -m yetl init <my_project>` then the json validation schema for the config files including table the table config will be created at `./<my_project>/piplines/json-schemas/sibytes_yetl_tables_schema.json`. Using vscode and the [RedHat yaml extension](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) you can add the following json schema reference to `./<my_project>/piplines/tables.yml` to provide live validation and intellisense:
+
+```yaml
+# yaml-language-server: $schema=./json_schema/sibytes_yetl_tables_schema.json
+```
+
 This reference describes the required format of the `tables.yaml` configuration.
 
 ```yaml
@@ -213,7 +222,7 @@ Version is the version number of yetl that the metadata is compatible with. If t
 Example:
 
 ```yaml
-version: 1.6.5
+version: 2.1.0
 ```
 
 ### Stage

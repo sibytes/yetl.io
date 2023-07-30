@@ -62,7 +62,7 @@ spark:
     logging_level: ERROR
 spark_schema: ./schema
 sql: ./sql
-version: 1.6.5
+version: 2.1.0
 ```
 
 It also holds a spark configuration, this is what yetl uses to create the spark session if you choose to run yetl code locally. This can be usefull for local development and testing in deveops pipelines. Since we are just leveraging pyspark and delta lake it's very easy to install a local spark environment however you will need java installed if you want to work this way.
