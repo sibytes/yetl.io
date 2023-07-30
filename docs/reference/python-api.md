@@ -63,6 +63,8 @@ In the pipeline configuration we generalise this by declaring the following expr
 
 In some loading patterns we need to inject the period of data we want to load into the config. The `Timeslice` object is provided specifically to do this since internally handles datetime formatting, validation and wildcard handling for bulk data loading.
 
+#### Specific Day
+
 For example loading a **specific day**, injecting this `Timeslice`:
 
 ```python
@@ -82,6 +84,8 @@ Will result in this path:
 /Volumes/development/my_project/customer/2023/07/30/customer-20230730*.json
 ```
 
+#### Partial Bulk
+
 For example bulk **loading a year**, injecting this `Timeslice`:
 
 ```python
@@ -100,6 +104,8 @@ Will result in this wildcard path:
 ```
 /Volumes/development/my_project/customer/2023/*/*/customer-2023***.json
 ```
+
+#### Full Bulk
 
 For example **all time**, injecting this `Timeslice`:
 
