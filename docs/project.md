@@ -33,13 +33,18 @@ This will create:
 
 - logging configuration file `logging.yaml`
 - yetl project configuration file `yetl_test.yaml` project configuration file.
+- Excel template `tables.xlsx` to curate tables names and properties that you want to load, this can be built into a configuration `tables.yaml` with `python -m yetl import-tables`
+- `json-schema` contains json schema that you can reference and use redhat's yaml plugin when crafting configuration to get intellisense and validation. There are schemas for:
+    - `./pipelines/project.yaml`
+    - `./pipelines/tables.yaml`
+    - `./pipelines/<my_pipelines>.yaml`
 - directory structure to build pipelines
 
 ![yetl init project structure](./assets/yetl_init_project.png)
 
 
 - databricks - will store databricks workflows, notebooks, etc that will be deployed to databricks.
-- pipelines - will sore yetl configuration for the data pipelines.
+- pipelines - will store yetl configuration for the data pipelines.
 - sql - if you choose to define some tables using SQL explicitly and have yetl create those tables then the SQL files will go in here.
 - schema - will hold the spark schema's in yaml for the landing data files when we autogenerate the schema's
 
@@ -79,9 +84,9 @@ Sometimes there are requirements to explicitly create tables using SQL DDL state
 
 For example if you're loading a fan in pattern where multiple source tables are loading into the same destination table in parallel you cannot create the schema from the datafeed on the fly, either with or without the merge schema option. This is because delta tables are optimistically isolated and attempting the change the schema in multiple process will mostly likely cause a [conflict](https://docs.delta.io/latest/concurrency-control.html#metadatachangedexception). This is common pattern for audit tracking tables when loading bronze and silver tables (raw and base stages respectively)
 
-You may also just find it more practical to manage table creation by explicitly declaring create table SQL statements. There is a feature in the road map to automatically snyc the table schema when changes are made, although that currently is not implemented.
+You may also just find it more practical to manage table creation by explicitly declaring create table SQL statements. You can also use this feature to create views.
 
-In order to explicitly define tables using SQL:
+In order to explicitly define tables or views using SQL:
 
 1. Create a folder in the `sql` directory that is the database name e.g. `my_database`
 2. Create a .sql file in the folder called the name of the table e.g. `my_table.sql`
@@ -95,7 +100,7 @@ e.g.
 
 For [example](https://github.com/sibytes/databricks-patterns/blob/main/header_footer/sql/yetl_control_header_footer/raw_audit.sql), in this project we use this feature to create an audit tracking table for loading a ronze (raw) tables called `yetl_control_header_footer.raw_audit.sql`. 
 
-Note that if we want to declare the table unmananged and provide an explicit location we can do using the jinja variable `{{location}}` which is defined in the pipeline configuration. See the SQL  documentation for full details and complete list of jinja variables supported.
+Note that if we want to declare the table unmanaged and provide an explicit location we can do using the jinja variable `{{location}}` which is defined in the pipeline configuration. See the SQL  documentation for full details and complete list of jinja variables supported.
 
 
 ## Pipeline
@@ -111,24 +116,32 @@ A lot of thought has gone into this design to make configuration creation and ma
 
 This configuration file contains the information of **WHAT** the database tables and files are that we want to load. What we mean by that, is that it's at the grain of the table and therefore each table can be configured differently if required. For example each table has it's own name. It doesn't contain any configuration of how the table is loaded.
 
-One table definition file is allowed per project. Each file can hold definitions for any number of tables for databases at the following data stages. Database table type can be Read (spark read api for various formats) or DeltaLake:
+One table definition file is allowed per project. Each file can hold definitions for any number of tables for databases at the following data stages. Database table type can be `read` (spark read api for various formats) or `delta_lake`:
 
-- audit_control
-- landing
-- raw (bronze)
-- base (silver)
-- curated (gold)
+- `audit_control` - `delta_lake`
+- `source` - `read` or `delta-lake`
+- `landing` - `read`
+- `raw` (bronze) - `delta-lake`
+- `base` (silver) - `delta-lake`
+- `curated` (gold) - `delta-lake`
 
-Typically Read table types would be used in landing and DeltaLake tables for everything else.
+Typically `read` table types would be used in `landing` and `delta-lake` tables for everything else. `source` may not normally be required for Databricks pipelines since data will be landed using some other cross domain data orchestration tool e.g. Azure Data Factory. However yetl does support `source` for `read` and `delta-lake` tables types it can be usefull when:
 
-It is therefore oppinionated about the basic levels that should be implemented in a data warehouse in terms of stages and follows the medallion lakehouse arhitecture. It's rigidity starts and ends there however; you can put what ever tables you want in any layer, in any datbase with dependencies entirely of your own choosing.
+- data doesn't need to be landed and is available from some via a spark source
+- migrating tables from an older deltalake into a new architecute e.g. Unity Catalog migration
+- landing data directly from api's
+
+It is therefore opinionated about the basic levels that should be implemented in terms of stages and follows the medallion lakehouse arhitecture. It's rigidity starts and ends there however; you can put what ever tables you want in any layer, in any datbase with dependencies entirely of your own choosing.
 
 [tables.yaml example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.yaml)
 
 By far the biggest hurdle is defining the table configuration. To rememedy this the yetl CLI tool has command to convert an Excel document into the required yaml format. Curating this information in Excel is far more user friendly than a yaml document for large numbers of tables. See the pipeline documentation for full details.
 
-[tables.xlsx example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.xlsx)
+```sh
+python -m yetl import-tables ./pipelines/tables.xlsx ./pipelines/tables.yaml
+```
 
+[tables.xlsx](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.xlsx) -> [tables.yaml](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/tables.yaml)
 
 ### Pipeline - The How!
 
@@ -137,6 +150,8 @@ This configuration file contains pipeline configuration properties that describe
 An example use case of this might be to batch load a large migration dataset; then turn on autoloader and event load incrementals from that position onwards.
 
 [batch.yaml pipeline example](https://github.com/sibytes/databricks-patterns/blob/main/ad_works_lt/pipelines/batch.yaml)
+
+## Summary
 
 So what does yetl do that provides value, since all we have is a bunch of configuration files:
 
@@ -147,7 +162,7 @@ So what does yetl do that provides value, since all we have is a bunch of config
 
 ### Configuration Stitching
 
-It stitches the table and pipeline data together using a minimal python idioms and provides easy access to the table collections and pipeline properties. Some properties fall on a gray line in the sense that sometimes they are the same for all tables but on specific occaisions you might want them to be different. For e.g.. deltalake properties. You can define them in the pipeline doc but override them if you want on specific tables.
+It stitches the table and pipeline data together using a minimal python idioms and provides easy access to the table collections and pipeline properties. Some properties fall on a gray line in the sense that sometimes they are the same for all tables but on specific occaisions you might want them to be different. For example deltalake properties. You can define them in the pipeline doc but override them if you want on specific tables.
 
 ### Jinja Rendering
 
