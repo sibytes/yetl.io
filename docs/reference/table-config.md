@@ -31,7 +31,7 @@ Here is the `tables.yaml` metadata that describes the stages, databases and tabl
 
 # yaml-language-server: $schema=./json_schema/sibytes_yetl_tables_schema.json
 
-version: 2.1.0
+version: 3.0.0
 
 audit_control:
   delta_lake:
@@ -222,7 +222,7 @@ Version is the version number of yetl that the metadata is compatible with. If t
 Example:
 
 ```yaml
-version: 2.1.0
+version: 3.0.0
 ```
 
 ### Stage

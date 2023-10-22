@@ -99,7 +99,7 @@ Using databricks repo's you can clone your project into databricks.
 
 This must be in it's own cell:
 ```sh
-%pip install yetl-framework==2.1.0
+%pip install yetl-framework==3.0.0
 ```
 
 Executing the following code will load the files and save the spark schema into the `./my_project/schema' directory in yaml format making it easy to review and adjust if you wish. There's no reason to move the files anywhere else once created, yetl uses this location as a schema repo. The files will named after the tables making it intuitive to understand what the schema's are and how the map.
