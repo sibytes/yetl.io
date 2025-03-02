@@ -70,9 +70,9 @@ nav:
     - Project: project.md
     - On-Board Datafeed: on-board-datafeed.md
     - Reference:
-      - Project Config: reference/project-config.md
+      # - Project Config: reference/project-config.md
       - Table Config: reference/table-config.md
-      - Pipeline Config: reference/pipeline-config.md
+      # - Pipeline Config: reference/pipeline-config.md
       - Python API: reference/python-api.md
     - About: about.md
 
@@ -85,7 +85,6 @@ plugins:
         level: debug
       formats:
         pdf:
-          eplicit: false
           enabled: !ENV [MKDOCS_EXPORTER_PDF, true]
           concurrency: 16
           stylesheets:

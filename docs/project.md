@@ -1,6 +1,3 @@
----
-pdf: true
----
 # Project
 
 Yetl has the concept of project. A project houses all the assets to configure your pipelines, the pipelines themselves and deploymemnt assets. They are deployable products that can be a data feed or an individual component data feed product of something larger.

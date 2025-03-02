@@ -1,6 +1,3 @@
----
-pdf: true
----
 # On-Board Datafeed
 
 These are the outline steps to on-board a new datafeed:
@@ -170,6 +167,9 @@ As you can see using this approach can also be used for creating tables in a pip
 
 ## Develop & Test Pipeline
 
+TODO
+
 ## Deploy Product
 
+TODO
 

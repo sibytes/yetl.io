@@ -1,6 +1,3 @@
----
-pdf: true
----
 # Yet (another) ETL Framework
 
 Expressive, agile, fun for Data Engineers using Python!
