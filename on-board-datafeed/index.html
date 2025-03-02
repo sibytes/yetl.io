@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Data engineering framework to template data flow pipelines and implement transforms in python" name="description"/>
+<meta content="Shaun Ryan" name="author"/>
+<link href="https://yetl.io/on-board-datafeed/" rel="canonical"/>
+<link href="../project/" rel="prev"/>
+<link href="../reference/table-config/" rel="next"/>
+<link href="../assets/logo.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.6" name="generator"/>
+<title>On-Board Datafeed - YETL</title>
+<link href="../assets/stylesheets/main.8608ea7d.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="pink" data-md-color-primary="pink" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#on-board-datafeed">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="YETL" class="md-header__button md-logo" data-md-component="logo" href=".." title="YETL">
+<img alt="logo" src="../assets/logo.png"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            YETL
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              On-Board Datafeed
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="pink" data-md-color-media="" data-md-color-primary="pink" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="purple" data-md-color-media="" data-md-color-primary="purple" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"></path></svg>
+</a>
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+<div class="md-search__suggest" data-md-component="search-suggest"></div>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/sibytes/yetl" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"></path></svg>
+</div>
+<div class="md-source__repository">
+    sibytes/yetl
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="YETL" class="md-nav__button md-logo" data-md-component="logo" href=".." title="YETL">
+<img alt="logo" src="../assets/logo.png"/>
+</a>
+    YETL
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/sibytes/yetl" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"></path></svg>
+</div>
+<div class="md-source__repository">
+    sibytes/yetl
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    Home
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../project/">
+<span class="md-ellipsis">
+    Project
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    On-Board Datafeed
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    On-Board Datafeed
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#load-landing-data">
+<span class="md-ellipsis">
+      Load Landing Data
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-yetl-project">
+<span class="md-ellipsis">
+      Create Yetl Project
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-table-metadata">
+<span class="md-ellipsis">
+      Create Table Metadata
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-pipeline-metadata">
+<span class="md-ellipsis">
+      Create Pipeline Metadata
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-spark-schema">
+<span class="md-ellipsis">
+      Create Spark Schema
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#develop-test-pipeline">
+<span class="md-ellipsis">
+      Develop &amp; Test Pipeline
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#deploy-product">
+<span class="md-ellipsis">
+      Deploy Product
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--section md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+<span class="md-ellipsis">
+    Reference
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/table-config/">
+<span class="md-ellipsis">
+    Table Config
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/python-api/">
+<span class="md-ellipsis">
+    Python API
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../about/">
+<span class="md-ellipsis">
+    About
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#load-landing-data">
+<span class="md-ellipsis">
+      Load Landing Data
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-yetl-project">
+<span class="md-ellipsis">
+      Create Yetl Project
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-table-metadata">
+<span class="md-ellipsis">
+      Create Table Metadata
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-pipeline-metadata">
+<span class="md-ellipsis">
+      Create Pipeline Metadata
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#create-spark-schema">
+<span class="md-ellipsis">
+      Create Spark Schema
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#develop-test-pipeline">
+<span class="md-ellipsis">
+      Develop &amp; Test Pipeline
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#deploy-product">
+<span class="md-ellipsis">
+      Deploy Product
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset"><a class="md-content__button md-icon" download="On-Board Datafeed.pdf" href="index.pdf" title="Download as PDF"><html><body><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m14 2 6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm4 18V9h-5V4H6v16zm-6-1-4-4h2.5v-3h3v3H16z"></path></svg></body></html></a><a class="md-content__button md-icon" href="index.pdf" target="_blank" title="View as PDF"><html><body><svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 .41.12.8.34 1.12.07.11.16.21.25.29.36.37.86.59 1.41.59h7.53c-.53-.58-.92-1.25-1.18-2H6V4h7v5h5v3c.7 0 1.37.12 2 .34V8zm4 21 5-4.5-3-2.7-2-1.8v3h-4v3h4z"></path></svg></body></html></a>
+
+<h1 id="on-board-datafeed">On-Board Datafeed</h1>
+<p>These are the outline steps to on-board a new datafeed:</p>
+<ol>
+<li>Load Landing Data</li>
+<li>Create Yetl Project</li>
+<li>Create Table Metadata</li>
+<li>Create Pipeline Metadata</li>
+<li>Create Spark Schema</li>
+<li>Develop &amp; Test Pipeline</li>
+<li>Deploy Product</li>
+</ol>
+<h2 id="load-landing-data">Load Landing Data</h2>
+<p>This project is about loading data from cloud blob into databricks deltalake tables. Data would normally be orchestrated into landing using some other tool for example Azure Data Factory or AWS Data Pipeline or some other tool that specialises in securely wholesale copying datasets into the cloud or between cloud services.</p>
+<p>You may already have this orchestration in place in which case the data will in your landing blob location already or you mock it by getting a sample of data and manually copying it into the location it will be landed to.</p>
+<p>For test driven development you can include a small vanilla hand crafted data set into the project itself that can automatically be copied into place from the workspace files as way of creating repeatable end to end integration tests that can staged, executed and torn down with simple commands.</p>
+<h2 id="create-yetl-project">Create Yetl Project</h2>
+<p>Create a directory, setup virtual python environment and install yetl.</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>mkdir<span class="w"> </span>my_project
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>my_project
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nb">source</span><span class="w"> </span>venv/bin/activate
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>pip<span class="w"> </span>install<span class="w"> </span>yetl-framework
+</code></pre></div>
+<p>Create yetl project scaffolding.</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>yetl<span class="w"> </span>init<span class="w"> </span>my_project<span class="w"> </span>
+</code></pre></div>
+<h2 id="create-table-metadata">Create Table Metadata</h2>
+<p>Fill out the spreadsheet template with landing and deltalake architecture that you want to load.
+The excel file has to be in a specific format other the import will not work. Use this <a href="https://github.com/sibytes/databricks-patterns/blob/main/header_footer/pipelines/tables.xlsx">example</a> as a template</p>
+<p>NOTE:</p>
+<ul>
+<li>Lists are entered using character return between items in an Excel cell.</li>
+<li>Dicts are entered using a : between key value pairs and character returns betweenitmes in an Excel cell.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>merge_column.column</th>
+<th>required</th>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stage</td>
+<td>y</td>
+<td>[audit_control, landing, raw, base, curated]</td>
+<td>The architecural layer of the data lake house you want the DB in</td>
+</tr>
+<tr>
+<td>table_type</td>
+<td>y</td>
+<td>[read, delta_lake]</td>
+<td>What type of table to create, read is a spark.read, delta_lake is a delta table.</td>
+</tr>
+<tr>
+<td>catalog</td>
+<td>n</td>
+<td>str</td>
+<td>name of the catalog. Although you can set it here in the condif the api allows passing it as a parameter also.</td>
+</tr>
+<tr>
+<td>database</td>
+<td>y</td>
+<td>str</td>
+<td>name of the database</td>
+</tr>
+<tr>
+<td>table</td>
+<td>y</td>
+<td>str</td>
+<td>name of the table</td>
+</tr>
+<tr>
+<td>sql</td>
+<td>n</td>
+<td>[y, n]</td>
+<td>whether or not to include a default link to a SQL ddl file for creating the table.</td>
+</tr>
+<tr>
+<td>id</td>
+<td>n</td>
+<td>str, List[str]</td>
+<td>a column name or list of column names that is the primary key of the table.</td>
+</tr>
+<tr>
+<td>depends_on</td>
+<td>n</td>
+<td>List[str]</td>
+<td>list of other tables that the table is loaded from thus creating a mapping. It required the yetl index which is <code>stage.database.table</code> you can also use  <code>stage.database.*</code> for exmaple if you want to reference all the tables in a database.</td>
+</tr>
+<tr>
+<td>deltalake.delta_properties</td>
+<td>n</td>
+<td>Dict[str,str]</td>
+<td>key value pairs of databricks delta properties</td>
+</tr>
+<tr>
+<td>deltalake.identity</td>
+<td>n</td>
+<td>[y, n]</td>
+<td>whether or not to include an indentity on the table when a delta table is created implicitly</td>
+</tr>
+<tr>
+<td>deltalake.partition_by</td>
+<td>n</td>
+<td>str, List[str]</td>
+<td>column or list of columns to partition the table by</td>
+</tr>
+<tr>
+<td>deltalake.delta_constraints</td>
+<td>n</td>
+<td>Dict[str,str]</td>
+<td>key value pairs of delta table constraints</td>
+</tr>
+<tr>
+<td>deltalake.z_order_by</td>
+<td>n</td>
+<td>str, List[str]</td>
+<td>column or list of columns to z-order the table by</td>
+</tr>
+<tr>
+<td>deltalake.vacuum</td>
+<td>n</td>
+<td>int</td>
+<td>vaccum threshold in days for a delta table</td>
+</tr>
+<tr>
+<td>warning_thresholds.invalid_ratio</td>
+<td>n</td>
+<td>float</td>
+<td>ratio of invalid to valid rows threshold that can be used to raise a warning</td>
+</tr>
+<tr>
+<td>warning_thresholds.invalid_rows</td>
+<td>n</td>
+<td>int</td>
+<td>number of invalid rows threshold that can be used to raise a warning</td>
+</tr>
+<tr>
+<td>warning_thresholds.max_rows</td>
+<td>n</td>
+<td>int</td>
+<td>max number of rows thresholds that can be used to raise a warning</td>
+</tr>
+<tr>
+<td>warning_thresholds.mins_rows</td>
+<td>n</td>
+<td>int</td>
+<td>min number of rows thresholds that can be used to raise a warning</td>
+</tr>
+<tr>
+<td>error_thresholds.invalid_ratio</td>
+<td>n</td>
+<td>float</td>
+<td>ratio of invalid to valid rows threshold that can be used to raise an exception</td>
+</tr>
+<tr>
+<td>error_thresholds.invalid_rows</td>
+<td>n</td>
+<td>int</td>
+<td>number of invalid rows threshold that can be used to raise an exception</td>
+</tr>
+<tr>
+<td>error_thresholds.max_rows</td>
+<td>n</td>
+<td>int</td>
+<td>max number of rows thresholds that can be used to raise an exception</td>
+</tr>
+<tr>
+<td>error_thresholds.mins_rows</td>
+<td>n</td>
+<td>int</td>
+<td>min number of rows thresholds that can be used to raise an exception</td>
+</tr>
+<tr>
+<td>custom_properties.process_group</td>
+<td>n</td>
+<td>any</td>
+<td>customer properties can be what ever you want. Yetl is smart enough to build them into the API</td>
+</tr>
+<tr>
+<td>custom_properties.rentention_days</td>
+<td>n</td>
+<td>any</td>
+<td></td>
+</tr>
+<tr>
+<td>custom_properties.anything_you_want</td>
+<td>n</td>
+<td>any</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Create the tables.yaml file by executing:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>python -m yetl import-tables ./my_project/pipelines/tables.xlsx ./my_project/pipelines/tables.yaml
+</code></pre></div>
+<h2 id="create-pipeline-metadata">Create Pipeline Metadata</h2>
+<p>In the <code>./my_project/pipelines</code> folder create a yaml file that contains the metadata specifying how to load the tables defined in <code>./my_project/pipelines/tables.yaml</code>. You can call them whatever you want and you can create more than one. Perhaps one that batch loads and another that event stream loads. The yetl api will allow you to parameterise which pipeline metadata you want to use. For the purpose of these docs we will refere to this pipeline as <code>my_pipeline.yaml</code>.</p>
+<p>The pipeline file <code>my_pipeline.yaml</code> has a relative file reference to <code>tables.yaml</code> and the therefore yetl knows what files to use to stitch the table metadata together.</p>
+<p>Please see the pipeline reference documentation for details. Here is an <a href="https://github.com/sibytes/databricks-patterns/blob/main/header_footer/pipelines/autoloader.yaml">example</a>.</p>
+<h2 id="create-spark-schema">Create Spark Schema</h2>
+<p>Once the yetl metadata is in place we can start using the API. The 1st task is to create the landing schema that need to load the data. This can be done using a simple notebook on databricks.</p>
+<p>Using databricks repo's you can clone your project into databricks.</p>
+<p>This must be in it's own cell:
+</p><div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>%pip<span class="w"> </span>install<span class="w"> </span>yetl-framework<span class="o">==</span><span class="m">3</span>.0.0
+</code></pre></div>
+<p>Executing the following code will load the files and save the spark schema into the `./my_project/schema' directory in yaml format making it easy to review and adjust if you wish. There's no reason to move the files anywhere else once created, yetl uses this location as a schema repo. The files will named after the tables making it intuitive to understand what the schema's are and how the map.</p>
+<p>The <a href="https://github.com/sibytes/databricks-patterns/tree/main/ad_works">ad works example project</a> shows this <a href="https://github.com/sibytes/databricks-patterns/blob/main/ad_works/databricks/notebooks/bronze/create_schema.py">notebook</a> approach working very well creating the <a href="https://github.com/sibytes/databricks-patterns/tree/main/ad_works/schema">schema</a> over a relatively large number of <a href="https://github.com/sibytes/databricks-patterns/blob/main/ad_works/pipelines/tables.yaml">tables</a>.</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">yetl</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>  <span class="n">Config</span><span class="p">,</span> <span class="n">Read</span><span class="p">,</span> <span class="n">DeltaLake</span><span class="p">,</span> <span class="n">Timeslice</span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="p">)</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+<a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a>
+<a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_schema</span><span class="p">(</span>
+<a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a>  <span class="n">source</span><span class="p">:</span><span class="n">Read</span><span class="p">,</span> 
+<a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a>  <span class="n">destination</span><span class="p">:</span><span class="n">DeltaLake</span>
+<a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="p">):</span>
+<a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a>
+<a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a>  <span class="n">options</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">options</span>
+<a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a>  <span class="n">options</span><span class="p">[</span><span class="s2">"inferSchema"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a>  <span class="n">options</span><span class="p">[</span><span class="s2">"enforceSchema"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a>
+<a href="#__codelineno-4-15" id="__codelineno-4-15" name="__codelineno-4-15"></a>  <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+<a href="#__codelineno-4-16" id="__codelineno-4-16" name="__codelineno-4-16"></a>    <span class="n">spark</span><span class="o">.</span><span class="n">read</span>
+<a href="#__codelineno-4-17" id="__codelineno-4-17" name="__codelineno-4-17"></a>    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">format</span><span class="p">)</span>
+<a href="#__codelineno-4-18" id="__codelineno-4-18" name="__codelineno-4-18"></a>    <span class="o">.</span><span class="n">options</span><span class="p">(</span><span class="o">**</span><span class="n">options</span><span class="p">)</span>
+<a href="#__codelineno-4-19" id="__codelineno-4-19" name="__codelineno-4-19"></a>    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<a href="#__codelineno-4-20" id="__codelineno-4-20" name="__codelineno-4-20"></a>  <span class="p">)</span>
+<a href="#__codelineno-4-21" id="__codelineno-4-21" name="__codelineno-4-21"></a>
+<a href="#__codelineno-4-22" id="__codelineno-4-22" name="__codelineno-4-22"></a>  <span class="n">schema</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<a href="#__codelineno-4-23" id="__codelineno-4-23" name="__codelineno-4-23"></a>  <span class="n">schema</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<a href="#__codelineno-4-24" id="__codelineno-4-24" name="__codelineno-4-24"></a>
+<a href="#__codelineno-4-25" id="__codelineno-4-25" name="__codelineno-4-25"></a>  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">spark_schema</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a href="#__codelineno-4-26" id="__codelineno-4-26" name="__codelineno-4-26"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+<a href="#__codelineno-4-27" id="__codelineno-4-27" name="__codelineno-4-27"></a>
+<a href="#__codelineno-4-28" id="__codelineno-4-28" name="__codelineno-4-28"></a><span class="n">project</span> <span class="o">=</span> <span class="s2">"my_project"</span>
+<a href="#__codelineno-4-29" id="__codelineno-4-29" name="__codelineno-4-29"></a><span class="n">pipeline</span> <span class="o">=</span> <span class="s2">"my_pipeline"</span>
+<a href="#__codelineno-4-30" id="__codelineno-4-30" name="__codelineno-4-30"></a>
+<a href="#__codelineno-4-31" id="__codelineno-4-31" name="__codelineno-4-31"></a><span class="c1"># Timeslice may be required depending how you've configured you landing area.</span>
+<a href="#__codelineno-4-32" id="__codelineno-4-32" name="__codelineno-4-32"></a><span class="c1"># here we just using a single period to define the schema </span>
+<a href="#__codelineno-4-33" id="__codelineno-4-33" name="__codelineno-4-33"></a><span class="c1"># Timeslice(year="*", month="*", day="*") would use all the data </span>
+<a href="#__codelineno-4-34" id="__codelineno-4-34" name="__codelineno-4-34"></a><span class="c1"># you have which could be very inefficient.</span>
+<a href="#__codelineno-4-35" id="__codelineno-4-35" name="__codelineno-4-35"></a>
+<a href="#__codelineno-4-36" id="__codelineno-4-36" name="__codelineno-4-36"></a><span class="c1"># This exmaple uses the data in the landing partition of 2023-01-01</span>
+<a href="#__codelineno-4-37" id="__codelineno-4-37" name="__codelineno-4-37"></a><span class="c1"># how that is mapped to file and directories the my_pipeline definition</span>
+<a href="#__codelineno-4-38" id="__codelineno-4-38" name="__codelineno-4-38"></a><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span>
+<a href="#__codelineno-4-39" id="__codelineno-4-39" name="__codelineno-4-39"></a>  <span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> 
+<a href="#__codelineno-4-40" id="__codelineno-4-40" name="__codelineno-4-40"></a>  <span class="n">pipeline</span><span class="o">=</span><span class="n">pipeline</span><span class="p">,</span>
+<a href="#__codelineno-4-41" id="__codelineno-4-41" name="__codelineno-4-41"></a>  <span class="n">timeslice</span><span class="o">=</span><span class="n">Timeslice</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a href="#__codelineno-4-42" id="__codelineno-4-42" name="__codelineno-4-42"></a><span class="p">)</span>
+<a href="#__codelineno-4-43" id="__codelineno-4-43" name="__codelineno-4-43"></a>
+<a href="#__codelineno-4-44" id="__codelineno-4-44" name="__codelineno-4-44"></a><span class="n">tables</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">lookup_table</span><span class="p">(</span>
+<a href="#__codelineno-4-45" id="__codelineno-4-45" name="__codelineno-4-45"></a>  <span class="n">stage</span><span class="o">=</span><span class="n">StageType</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span> 
+<a href="#__codelineno-4-46" id="__codelineno-4-46" name="__codelineno-4-46"></a>  <span class="n">first_match</span><span class="o">=</span><span class="kc">False</span>
+<a href="#__codelineno-4-47" id="__codelineno-4-47" name="__codelineno-4-47"></a><span class="p">)</span>
+<a href="#__codelineno-4-48" id="__codelineno-4-48" name="__codelineno-4-48"></a>
+<a href="#__codelineno-4-49" id="__codelineno-4-49" name="__codelineno-4-49"></a><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tables</span><span class="p">:</span>
+<a href="#__codelineno-4-50" id="__codelineno-4-50" name="__codelineno-4-50"></a>  <span class="n">table_mapping</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_table_mapping</span><span class="p">(</span>
+<a href="#__codelineno-4-51" id="__codelineno-4-51" name="__codelineno-4-51"></a>    <span class="n">t</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">database</span><span class="p">,</span> <span class="n">create_table</span><span class="o">=</span><span class="kc">False</span>
+<a href="#__codelineno-4-52" id="__codelineno-4-52" name="__codelineno-4-52"></a>  <span class="p">)</span>
+<a href="#__codelineno-4-53" id="__codelineno-4-53" name="__codelineno-4-53"></a>  <span class="n">create_schema</span><span class="p">(</span><span class="n">table_mapping</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">table_mapping</span><span class="o">.</span><span class="n">destination</span><span class="p">)</span>
+</code></pre></div>
+<p>As you can see using this approach can also be used for creating tables in a pipeline step prior to any load pipeline using the <code>create_table</code> parameter. It will either create explicity defined tables using SQL DML if you've configured any or just create register empty delta tables with no schema. This may be required if you have multiple sources flowing into a single table (fan-in) to avoid transaction isolation errors creating the tables the 1st time that the pipeline runs.</p>
+<h2 id="develop-test-pipeline">Develop &amp; Test Pipeline</h2>
+<p>TODO</p>
+<h2 id="deploy-product">Deploy Product</h2>
+<p>TODO</p>
+
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2021 - 2023 Shaun Ryan
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.annotate", "content.tooltips", "navigation.indexes", "navigation.sections", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+</body>
+</html>

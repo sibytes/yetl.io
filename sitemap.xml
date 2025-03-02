@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://yetl.io/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/about/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/on-board-datafeed/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/project/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/reference/pipeline-config/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/reference/project-config/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/reference/python-api/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+    <url>
+         <loc>https://yetl.io/reference/table-config/</loc>
+         <lastmod>2025-03-02</lastmod>
+    </url>
+</urlset>
