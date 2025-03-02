@@ -85,6 +85,7 @@ plugins:
         level: debug
       formats:
         pdf:
+          eplicit: false
           enabled: !ENV [MKDOCS_EXPORTER_PDF, true]
           concurrency: 16
           stylesheets:

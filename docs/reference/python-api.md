@@ -1,3 +1,7 @@
+---
+pdf: true
+---
+
 # Python API
 
 The goal of yetl is to easily declare data pipeline configuration. Once declared you'll want to access that data strcutures that you've declared using python. This reference shows the canonical patterns to load up the configuration and use it however you see fit.

@@ -1,3 +1,7 @@
+---
+pdf: true
+---
+
 # Table Configuration
 
 The table configuration defines that is loaded in a data pipeline.

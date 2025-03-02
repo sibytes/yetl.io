@@ -1,3 +1,6 @@
+---
+pdf: true
+---
 # On-Board Datafeed
 
 These are the outline steps to on-board a new datafeed:
